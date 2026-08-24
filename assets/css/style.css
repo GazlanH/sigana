@@ -1,0 +1,184 @@
+/* ==========================================================================
+   SIGANA - PERUMDA TIRTA INTAN GARUT
+   Bootstrap 5 Theme & Custom Components
+   ========================================================================== */
+
+:root {
+  --pdam-blue: #0d6efd;
+  --pdam-dark: #0a3871;
+  --info-loc-border: #0284c7;
+  --info-loc-bg: #f0f9ff;
+  --info-loc-text: #0369a1;
+
+  --info-cause-border: #d97706;
+  --info-cause-bg: #fffbeb;
+  --info-cause-text: #92400e;
+
+  --info-action-border: #4f46e5;
+  --info-action-bg: #eef2ff;
+  --info-action-text: #3730a3;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #334155;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* SVG Icon */
+.svg-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: -2px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Header Brand Circle */
+.brand-logo-circle {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0d6efd 0%, #0a3871 100%);
+  color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Bulletin Cards (Bootstrap Compatible) */
+.bulletin-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid #cbd5e1;
+}
+
+.bulletin-card:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+.bulletin-card.card-perbaikan { border-top: 4px solid #dc3545 !important; }
+.bulletin-card.card-investigasi { border-top: 4px solid #ffc107 !important; }
+.bulletin-card.card-normalisasi { border-top: 4px solid #0dcaf0 !important; }
+.bulletin-card.card-selesai { border-top: 4px solid #198754 !important; }
+
+/* Informative Colored Blocks */
+.info-block-wilayah {
+  background: var(--info-loc-bg);
+  border: 1px solid #bae6fd;
+  border-left: 4px solid var(--info-loc-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+
+.info-block-wilayah .block-tag {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--info-loc-text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-block-cause {
+  background: var(--info-cause-bg);
+  border: 1px solid #fde68a;
+  border-left: 4px solid var(--info-cause-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.info-block-cause .block-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--info-cause-text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-block-action {
+  background: var(--info-action-bg);
+  border: 1px solid #c7d2fe;
+  border-left: 4px solid var(--info-action-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.info-block-action .block-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--info-action-text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-block-eta {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.84rem;
+  color: #991b1b;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-block-eta.selesai {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* Badges */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.badge-status.perbaikan { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-status.investigasi { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.badge-status.normalisasi { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.badge-status.selesai { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+
+.badge-dampak {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.badge-dampak.mati { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+.badge-dampak.kecil { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+.badge-dampak.rendah { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+/* Custom Ticket Tag */
+.ticket-tag {
+  font-family: inherit;
+  font-weight: 600;
+  color: #0a3871;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}

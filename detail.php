@@ -53,27 +53,27 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="card-body p-3 p-md-4">
-            <!-- Blok Wilayah (Blue Indicator) -->
-            <div class="info-block-wilayah mb-3 p-3">
-                <div class="block-tag mb-1"><?= getIcon('pin') ?> DAFTAR WILAYAH & JALAN TERDAMPAK</div>
+            <!-- Blok Wilayah (Area Terdampak) -->
+            <div class="bulletin-area-box mb-3 p-3">
+                <div class="fw-bold mb-1" style="color: #0369a1;"><?= getIcon('pin') ?> DAFTAR WILAYAH & JALAN TERDAMPAK</div>
                 <div class="text-dark">
                     <?= nl2br(clean($detail['wilayah_terdampak'])) ?>
                 </div>
             </div>
 
             <!-- Grid Penyebab & Tindakan -->
-            <div class="row g-3 mb-3">
+            <div class="row g-2 mb-3">
                 <div class="col-md-6">
-                    <div class="info-block-cause p-3 h-100">
-                        <div class="block-tag mb-1"><?= getIcon('warning') ?> PENYEBAB GANGGUAN</div>
-                        <div class="small"><?= nl2br(clean($detail['penyebab'])) ?></div>
+                    <div class="bulletin-mini-box cause p-3 h-100">
+                        <div class="bulletin-mini-label mb-2"><?= getIcon('warning') ?> PENYEBAB GANGGUAN</div>
+                        <div class="text-secondary"><?= nl2br(clean($detail['penyebab'])) ?></div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="info-block-action p-3 h-100">
-                        <div class="block-tag mb-1"><?= getIcon('tool') ?> TINDAKAN LAPANGAN</div>
-                        <div class="small"><?= nl2br(clean($detail['tindakan'])) ?></div>
+                    <div class="bulletin-mini-box action p-3 h-100">
+                        <div class="bulletin-mini-label mb-2"><?= getIcon('tool') ?> TINDAKAN LAPANGAN</div>
+                        <div class="text-secondary"><?= nl2br(clean($detail['tindakan'])) ?></div>
                     </div>
                 </div>
             </div>

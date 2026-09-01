@@ -44,16 +44,17 @@ $flash = getFlash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Petugas | SIGANA Perumda Tirta Intan Garut</title>
+    <link rel="icon" type="image/png" href="../assets/img/logo.png">
     <!-- Bootstrap 5.3.3 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=1.1">
 </head>
 <body class="bg-dark d-flex align-items-center justify-content-center min-vh-100 py-4 px-3">
 
 <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px; border-radius: 12px;">
     <div class="card-body p-4 p-md-5">
         <div class="text-center mb-4">
-            <div class="brand-logo-circle mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">TI</div>
+            <img src="../assets/img/logo.png" alt="Logo Perumda Tirta Intan Garut" width="64" height="64" class="mx-auto mb-2 d-block" style="width: 64px; height: 64px; max-width: 64px; max-height: 64px; object-fit: contain;">
             <h1 class="h5 fw-bold text-dark mb-1">SIGANA ADMIN</h1>
             <p class="small text-muted mb-0">PERUMDA AIR MINUM TIRTA INTAN GARUT</p>
         </div>

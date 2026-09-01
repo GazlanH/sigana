@@ -110,51 +110,53 @@ require_once __DIR__ . '/includes/header.php';
             <?php foreach ($pengumuman_list as $row): 
                 $cardStatusClass = 'card-' . strtolower($row['status']);
             ?>
-                <article class="card shadow-sm bulletin-card <?= $cardStatusClass ?>"
+                <article class="card bulletin-card <?= $cardStatusClass ?>"
                     data-title="<?= clean($row['judul']) ?>"
                     data-wilayah="<?= clean($row['wilayah_terdampak']) ?>"
                     data-kecamatan="<?= strtolower(clean($row['nama_kecamatan'])) ?>"
                     data-status="<?= strtolower(clean($row['status'])) ?>"
                     data-ticket="<?= clean($row['nomor_tiket']) ?>"
                 >
-                    <div class="card-body p-3 p-md-4">
-                        <!-- Top Metadata -->
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 small text-muted">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="card-body p-3 p-md-3">
+                        <!-- Top Metadata Bar -->
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <div class="d-flex align-items-center gap-1 flex-wrap">
                                 <span class="ticket-tag">#<?= clean($row['nomor_tiket']) ?></span>
                                 <?= renderStatusBadge($row['status']) ?>
                                 <?= renderDampakBadge($row['dampak_aliran']) ?>
                             </div>
-                            <div>
-                                Mulai: <strong><?= formatTanggalIndo($row['waktu_mulai'], true) ?></strong>
+                            <div class="text-muted small d-flex align-items-center gap-1">
+                                <?= getIcon('clock') ?> <span>Mulai:</span> <strong class="text-dark"><?= formatTanggalIndo($row['waktu_mulai'], true) ?></strong>
                             </div>
                         </div>
 
-                        <!-- Title -->
-                        <h3 class="h5 fw-bold text-dark mb-3"><?= clean($row['judul']) ?></h3>
-
-                        <!-- Wilayah Terdampak (Blue Block) -->
-                        <div class="info-block-wilayah mb-3">
-                            <div class="block-tag mb-1">
-                                <?= getIcon('pin') ?> KECAMATAN <?= clean($row['nama_kecamatan']) ?> (<?= clean($row['cabang_pelayanan']) ?>)
-                            </div>
-                            <div class="text-dark small">
-                                <strong>Area Terdampak:</strong> <?= nl2br(clean($row['wilayah_terdampak'])) ?>
+                        <!-- Title & Service Branch Subtitle -->
+                        <div class="mb-2">
+                            <h3 class="bulletin-title mb-1"><?= clean($row['judul']) ?></h3>
+                            <div class="text-muted small d-flex align-items-center gap-1 flex-wrap">
+                                <span class="text-primary fw-semibold"><?= getIcon('pin') ?> Wilayah Pelayanan:</span>
+                                <span class="text-dark fw-bold">Kecamatan <?= clean($row['nama_kecamatan']) ?></span>
+                                <span class="badge bg-light text-secondary border px-2 py-0" style="font-size: 0.72rem;"><?= clean($row['cabang_pelayanan']) ?></span>
                             </div>
                         </div>
 
-                        <!-- Grid: Penyebab & Tindakan -->
+                        <!-- Area Terdampak (Highlight Callout) -->
+                        <div class="bulletin-area-box mb-2">
+                            <strong><?= getIcon('pin') ?> Area Terdampak:</strong> <?= nl2br(clean($row['wilayah_terdampak'])) ?>
+                        </div>
+
+                        <!-- Grid: Penyebab & Tindakan Lapangan -->
                         <div class="row g-2 mb-3">
                             <div class="col-md-6">
-                                <div class="info-block-cause h-100">
-                                    <div class="block-tag mb-1"><?= getIcon('warning') ?> PENYEBAB GANGGUAN</div>
-                                    <div class="small"><?= clean($row['penyebab']) ?></div>
+                                <div class="bulletin-mini-box cause h-100">
+                                    <div class="bulletin-mini-label"><?= getIcon('warning') ?> Penyebab Gangguan</div>
+                                    <div><?= clean($row['penyebab']) ?></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="info-block-action h-100">
-                                    <div class="block-tag mb-1"><?= getIcon('tool') ?> TINDAKAN LAPANGAN</div>
-                                    <div class="small"><?= clean($row['tindakan']) ?></div>
+                                <div class="bulletin-mini-box action h-100">
+                                    <div class="bulletin-mini-label"><?= getIcon('tool') ?> Tindakan Lapangan</div>
+                                    <div><?= clean($row['tindakan']) ?></div>
                                 </div>
                             </div>
                         </div>
@@ -162,17 +164,18 @@ require_once __DIR__ . '/includes/header.php';
                         <!-- Footer: Estimasi & Actions -->
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 border-top">
                             <div class="info-block-eta <?= $row['status'] === 'selesai' ? 'selesai' : '' ?>">
-                                <span><?= $row['status'] === 'selesai' ? getIcon('check') . ' Status:' : getIcon('clock') . ' Estimasi Normal:' ?></span>
+                                <?= $row['status'] === 'selesai' ? getIcon('check') : getIcon('clock') ?>
+                                <span><?= $row['status'] === 'selesai' ? 'Status:' : 'Estimasi Normal:' ?></span>
                                 <strong>
                                     <?= $row['status'] === 'selesai' ? 'Pekerjaan Selesai (Aliran Normal)' : formatTanggalIndo($row['estimasi_selesai'], true) ?>
                                 </strong>
                             </div>
 
-                            <div class="d-flex gap-2">
-                                <a href="detail.php?tiket=<?= urlencode($row['nomor_tiket']) ?>" class="btn btn-outline-secondary btn-sm fw-semibold">
+                            <div class="d-flex gap-2 bulletin-action-btns">
+                                <a href="detail.php?tiket=<?= urlencode($row['nomor_tiket']) ?>" class="btn btn-outline-primary btn-sm fw-semibold">
                                     Rincian Lengkap
                                 </a>
-                                <button type="button" class="btn btn-success btn-sm fw-semibold"
+                                <button type="button" class="btn btn-success btn-sm fw-semibold d-inline-flex align-items-center gap-1"
                                     onclick="shareToWA(
                                         '<?= clean($row['nomor_tiket']) ?>',
                                         '<?= addslashes(clean($row['judul'])) ?>',
@@ -182,7 +185,7 @@ require_once __DIR__ . '/includes/header.php';
                                         '<?= addslashes(formatTanggalIndo($row['estimasi_selesai'], true)) ?>'
                                     )"
                                 >
-                                    <?= getIcon('whatsapp') ?> Bagikan WA
+                                    <?= getIcon('whatsapp') ?> <span>Bagikan WA</span>
                                 </button>
                             </div>
                         </div>

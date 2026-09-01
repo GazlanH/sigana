@@ -12,10 +12,11 @@ $flash = getFlash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($pageTitle) ? clean($pageTitle) . ' - ' : '' ?>Panel Admin SIGANA | Tirta Intan Garut</title>
+    <link rel="icon" type="image/png" href="../assets/img/logo.png">
     <!-- Bootstrap 5.3.3 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=1.1">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=1.1">
 </head>
 <body class="bg-light">
 
@@ -25,7 +26,7 @@ $flash = getFlash();
         <div class="d-flex justify-content-between align-items-center py-2">
             <!-- Brand Section -->
             <a class="d-flex align-items-center gap-2 text-decoration-none" href="index.php">
-                <span class="brand-logo-circle" style="width:36px;height:36px;font-size:0.95rem;">TI</span>
+                <img src="../assets/img/logo.png" alt="Logo" width="34" height="34" style="width: 34px; height: 34px; max-width: 34px; max-height: 34px; object-fit: contain; flex-shrink: 0;" class="brand-logo-img-sm">
                 <div>
                     <div class="fw-bold text-dark fs-6 lh-1">SIGANA ADMIN</div>
                     <div class="small text-muted fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.02em;">PERUMDA TIRTA INTAN GARUT</div>
@@ -78,7 +79,7 @@ $flash = getFlash();
 <div class="offcanvas offcanvas-start" tabindex="-1" id="adminMobileDrawer" aria-labelledby="adminMobileDrawerLabel">
     <div class="offcanvas-header border-bottom bg-light py-3">
         <div class="d-flex align-items-center gap-2" id="adminMobileDrawerLabel">
-            <span class="brand-logo-circle" style="width:34px;height:34px;font-size:0.9rem;">TI</span>
+            <img src="../assets/img/logo.png" alt="Logo" width="32" height="32" style="width: 32px; height: 32px; max-width: 32px; max-height: 32px; object-fit: contain; flex-shrink: 0;" class="brand-logo-img-sm">
             <div>
                 <div class="fw-bold text-dark fs-6 lh-1">SIGANA ADMIN</div>
                 <small class="text-muted" style="font-size: 0.7rem;">PERUMDA TIRTA INTAN</small>

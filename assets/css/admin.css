@@ -16,6 +16,16 @@ body {
   flex-direction: column;
 }
 
+/* Brand Logo */
+.brand-logo-img-sm {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
 /* Desktop Navbar Links (Clean, Centered, and Modern) */
 .admin-desktop-nav {
   background: #f1f5f9;

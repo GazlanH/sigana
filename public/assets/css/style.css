@@ -1,0 +1,234 @@
+/* ==========================================================================
+   SIGANA - PERUMDA TIRTA INTAN GARUT
+   Bootstrap 5 Theme & Custom Components
+   ========================================================================== */
+
+:root {
+  --pdam-blue: #0d6efd;
+  --pdam-dark: #0a3871;
+  --info-loc-border: #0284c7;
+  --info-loc-bg: #f0f9ff;
+  --info-loc-text: #0369a1;
+
+  --info-cause-border: #d97706;
+  --info-cause-bg: #fffbeb;
+  --info-cause-text: #92400e;
+
+  --info-action-border: #4f46e5;
+  --info-action-bg: #eef2ff;
+  --info-action-text: #3730a3;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #334155;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* SVG Icon */
+.svg-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: -2px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Header Brand Logo & Circle */
+.brand-logo-img {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  object-fit: contain;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.brand-logo-img-sm {
+  width: 34px !important;
+  height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  object-fit: contain;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.brand-logo-circle {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0d6efd 0%, #0a3871 100%);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Bulletin Cards (Space-Efficient & Modern Aesthetic) */
+.bulletin-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  overflow: hidden;
+}
+
+.bulletin-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07) !important;
+}
+
+.bulletin-card.card-perbaikan { border-left: 5px solid #ef4444 !important; }
+.bulletin-card.card-investigasi { border-left: 5px solid #f59e0b !important; }
+.bulletin-card.card-normalisasi { border-left: 5px solid #0284c7 !important; }
+.bulletin-card.card-selesai { border-left: 5px solid #10b981 !important; }
+
+/* Bulletin Title & Header */
+.bulletin-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* Compact Area Terdampak Callout */
+.bulletin-area-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-left: 3px solid #0284c7;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.bulletin-area-box strong {
+  color: #0369a1;
+}
+
+/* Compact Mini Grid Boxes (Penyebab & Tindakan) */
+.bulletin-mini-box {
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.83rem;
+  line-height: 1.45;
+}
+
+.bulletin-mini-box.cause {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 3px solid #d97706;
+}
+
+.bulletin-mini-box.action {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #6366f1;
+}
+
+.bulletin-mini-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bulletin-mini-box.cause .bulletin-mini-label { color: #b45309; }
+.bulletin-mini-box.action .bulletin-mini-label { color: #4338ca; }
+
+/* ETA Highlight Pill */
+.info-block-eta {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.82rem;
+  color: #991b1b;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
+}
+
+.info-block-eta.selesai {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* Badges */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.badge-status.perbaikan { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-status.investigasi { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.badge-status.normalisasi { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.badge-status.selesai { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+
+.badge-dampak {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.badge-dampak.mati { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+.badge-dampak.kecil { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+.badge-dampak.rendah { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+/* Custom Ticket Tag */
+.ticket-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+}
+
+/* Mobile Responsiveness for Cards */
+@media (max-width: 576px) {
+  .bulletin-action-btns {
+    width: 100%;
+  }
+  .bulletin-action-btns .btn {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+  .info-block-eta {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -4,58 +4,73 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Footer Publik Resmi (Clean Corporate Design)
+ * Footer Publik Resmi (Deep Oceanic Blue & Clean Multi-Column)
  * ============================================================================
  */
 ?>
-    <!-- Corporate Footer -->
-    <footer class="corporate-footer bg-white border-top mt-auto pt-4 pb-3">
+    <!-- Corporate Deep Blue Footer -->
+    <footer class="corporate-footer">
         <div class="container">
-            <div class="row g-4 mb-3">
-                <div class="col-lg-5 col-md-6">
+            <div class="row g-4 mb-4">
+                <!-- Column 1: Identity & Address -->
+                <div class="col-lg-4 col-md-6">
                     <div class="d-flex align-items-center gap-2 mb-2">
-                        <img src="assets/img/logo.png" alt="Logo Tirta Intan" width="36" height="36" class="brand-logo-img-sm">
+                        <img src="assets/img/logo.png" alt="Logo Tirta Intan Garut" width="44" height="44" class="footer-brand-logo">
                         <div>
-                            <div class="fw-bold text-dark lh-1">PERUMDA AIR MINUM TIRTA INTAN</div>
-                            <small class="text-muted fw-semibold">KABUPATEN GARUT</small>
+                            <div class="footer-brand-title">PERUMDA TIRTA INTAN</div>
+                            <div class="footer-brand-sub">KABUPATEN GARUT</div>
                         </div>
                     </div>
-                    <p class="small text-muted mb-2 pe-lg-4" style="line-height: 1.6;">
-                        Badan Usaha Milik Daerah (BUMD) Pemerintah Kabupaten Garut yang bertugas mengelola dan mendistribusikan air minum berkualitas secara merata untuk masyarakat.
+                    <p class="footer-desc pe-lg-3">
+                        Jl. Raya Bayongbong KM 3, Kec. Cilawu, Kab. Garut, Jawa Barat 44181.<br>
+                        Badan Usaha Milik Daerah (BUMD) Pemerintah Kabupaten Garut pengelola distribusi air bersih masyarakat.
                     </p>
-                    <div class="small text-muted">
-                        <?= getIcon('pin') ?> Jl. Raya Bayongbong KM 3, Kec. Cilawu, Kab. Garut, Jawa Barat 44181
+                    <div class="small text-info-subtle mt-2">
+                        <strong>Status Operasional:</strong> Posko Siaga 24 Jam Nonstop
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6">
-                    <h6 class="fw-bold text-dark mb-2 text-uppercase" style="font-size: 0.82rem; letter-spacing: 0.05em;">Layanan Pelanggan</h6>
-                    <ul class="list-unstyled small text-muted mb-0 d-flex flex-column gap-1">
-                        <li><?= getIcon('phone') ?> Call Center: <strong>(0262) 232450</strong></li>
-                        <li><?= getIcon('whatsapp') ?> WhatsApp: <strong>0811-2345-6789</strong></li>
-                        <li><?= getIcon('clock') ?> Jam Layanan: 24 Jam Nonstop</li>
-                        <li><?= getIcon('tool') ?> Posko Tangki Darurat Siaga</li>
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h4 class="footer-heading">Quick Link</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.php">Gangguan Layanan</a></li>
+                        <li><a href="index.php">Wilayah Pelayanan</a></li>
+                        <li><a href="tel:0262232450">Call Center Resmi</a></li>
+                        <li><a href="admin/login.php">Portal Petugas</a></li>
                     </ul>
                 </div>
 
-                <div class="col-lg-4 col-md-12">
-                    <h6 class="fw-bold text-dark mb-2 text-uppercase" style="font-size: 0.82rem; letter-spacing: 0.05em;">Tentang SIGANA</h6>
-                    <p class="small text-muted mb-3" style="line-height: 1.6;">
-                        Sistem Informasi Pengumuman Gangguan Aliran Air (SIGANA) dikembangkan sebagai wujud transparansi informasi publik dan respons cepat penanganan pemeliharaan jaringan pipa.
-                    </p>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="index.php" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size: 0.78rem;">Papan Pengumuman</a>
-                        <a href="admin/login.php" class="btn btn-outline-primary btn-sm py-1 px-2" style="font-size: 0.78rem;">Login Petugas Admin</a>
-                    </div>
+                <!-- Column 3: Layanan Pelanggan -->
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h4 class="footer-heading">Layanan Pelanggan</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://wa.me/6281123456789" target="_blank">Permintaan Tangki Air</a></li>
+                        <li><a href="https://wa.me/6281123456789" target="_blank">Lapor Pipa Bocor</a></li>
+                        <li><a href="tel:0262232450">Pengaduan Gangguan</a></li>
+                        <li><a href="index.php">Cek Status Penanganan</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Kontak & Social Media -->
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="footer-heading">Kontak & Posko</h4>
+                    <ul class="footer-links">
+                        <li><a href="tel:0262232450"><?= getIcon('phone') ?> (0262) 232450</a></li>
+                        <li><a href="https://wa.me/6281123456789" target="_blank"><?= getIcon('whatsapp') ?> 0811-2345-6789 (WhatsApp)</a></li>
+                        <li><a href="https://instagram.com" target="_blank">Instagram @tirtyaintangarut</a></li>
+                        <li><a href="https://facebook.com" target="_blank">Facebook Tirta Intan Garut</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="border-top pt-3 d-flex justify-content-between align-items-center flex-wrap gap-2 small text-muted">
+            <!-- Bottom Copyright Bar -->
+            <div class="footer-bottom">
                 <div>
-                    &copy; <?= date('Y') ?> <strong>Perumda Air Minum Tirta Intan Garut</strong>. Seluruh Hak Cipta Dilindungi.
+                    &copy; <?= date('Y') ?> <strong>Perumda Air Minum Tirta Intan Kabupaten Garut</strong>. All rights reserved.
                 </div>
-                <div>
-                    SIGANA Versi 2.5 &bull; Pure Native Architecture
+                <div class="d-none d-sm-block">
+                    SIGANA &bull; Sistem Informasi Gangguan Aliran Air
                 </div>
             </div>
         </div>
@@ -64,6 +79,6 @@
     <!-- Bootstrap 5.3.3 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Frontend Application Logic -->
-    <script src="assets/js/main.js?v=2.5"></script>
+    <script src="assets/js/main.js?v=3.0"></script>
 </body>
 </html>

@@ -4,11 +4,12 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Header Publik Resmi (Clean Corporate Design)
+ * Header Publik Resmi (Clean Modern & Less Clutter)
  * ============================================================================
  */
 require_once __DIR__ . '/functions.php';
 $flash = getFlash();
+$currentScript = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -27,54 +28,45 @@ $flash = getFlash();
     <!-- Bootstrap 5.3.3 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     
-    <!-- Custom Corporate Theme -->
-    <link rel="stylesheet" href="assets/css/style.css?v=2.5">
+    <!-- Custom Modern Theme -->
+    <link rel="stylesheet" href="assets/css/style.css?v=3.0">
 </head>
 <body class="bg-corporate d-flex flex-column min-vh-100">
 
-    <!-- Top Utility Bar (Kontak Resmi & Jam Operasional) -->
-    <div class="top-utility-bar py-1 bg-dark-navy text-white-50 border-bottom border-secondary-subtle">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2 small">
-            <div class="d-flex align-items-center gap-3">
-                <span class="d-inline-flex align-items-center gap-1">
-                    <span class="pulse-indicator"></span>
-                    <span class="text-white fw-semibold">Pusat Informasi Operasional</span>
-                </span>
-                <span class="d-none d-md-inline text-muted">|</span>
-                <span class="d-none d-md-inline text-white-50">Wilayah Pelayanan Kabupaten Garut</span>
-            </div>
-            <div class="d-flex align-items-center gap-3">
-                <a href="tel:0262232450" class="text-white-50 text-decoration-none hover-white d-inline-flex align-items-center gap-1">
-                    <?= getIcon('phone') ?> <span>Call Center: <strong>(0262) 232450</strong></span>
-                </a>
-                <span class="text-muted d-none d-sm-inline">|</span>
-                <a href="https://wa.me/6281123456789" target="_blank" class="text-success text-decoration-none hover-white d-inline-flex align-items-center gap-1 fw-semibold">
-                    <?= getIcon('whatsapp') ?> <span>WA: 0811-2345-6789</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Navigation Header (Clean Corporate) -->
-    <header class="main-header bg-white border-bottom sticky-top shadow-xs">
+    <!-- Main Navigation Header (Clean & Uncluttered) -->
+    <header class="main-header">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center py-2 py-md-3">
-                <!-- Brand Identity -->
-                <a href="index.php" class="brand-container d-flex align-items-center gap-2 gap-md-3 text-decoration-none">
-                    <img src="assets/img/logo.png" alt="Logo Perumda Tirta Intan Garut" width="46" height="46" class="corporate-brand-logo">
-                    <div class="brand-text">
-                        <div class="brand-title">PERUMDA AIR MINUM TIRTA INTAN</div>
-                        <div class="brand-subtitle">SIGANA &bull; Papan Pengumuman Gangguan Aliran Air</div>
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <!-- Brand Logo & Title -->
+                <a href="index.php" class="brand-container">
+                    <img src="assets/img/logo.png" alt="Logo Perumda Tirta Intan Garut" width="42" height="42" class="corporate-brand-logo">
+                    <div class="brand-text d-none d-sm-block">
+                        <div class="brand-title">PERUMDA TIRTA INTAN</div>
+                        <div class="brand-subtitle">SIGANA &bull; KABUPATEN GARUT</div>
                     </div>
                 </a>
 
-                <!-- Right Quick Navigation -->
-                <div class="d-flex align-items-center gap-2">
-                    <a href="index.php" class="btn btn-nav-pill btn-sm d-none d-md-inline-flex align-items-center gap-1">
-                        <?= getIcon('clock') ?> <span>Papan Pengumuman</span>
+                <!-- Desktop Center Navigation Links -->
+                <nav class="main-nav-links d-none d-md-flex">
+                    <a href="index.php" class="main-nav-item <?= in_array($currentScript, ['index.php', 'detail.php']) ? 'active' : '' ?>">
+                        Gangguan Layanan
                     </a>
-                    <a href="admin/login.php" class="btn btn-portal-login btn-sm d-inline-flex align-items-center gap-1">
-                        <?= getIcon('user') ?> <span>Portal Petugas</span>
+                    <a href="index.php#daftarWilayah" class="main-nav-item" onclick="if(document.getElementById('filterKecamatan')){ document.getElementById('filterKecamatan').focus(); return false; }">
+                        Wilayah Pelayanan
+                    </a>
+                    <a href="tel:0262232450" class="main-nav-item">
+                        Call Center
+                    </a>
+                </nav>
+
+                <!-- Right Action Buttons (Hubungi Posko & Login Petugas) -->
+                <div class="d-flex align-items-center gap-3">
+                    <a href="https://wa.me/6281123456789?text=Halo%20Admin%20Tirta%20Intan%20Garut,%20saya%20ingin%20menanyakan%20informasi%20gangguan%20air" target="_blank" class="btn-hubungi-kami">
+                        <span>Hubungi Posko</span>
+                        <?= getIcon('arrow-up-right') ?>
+                    </a>
+                    <a href="admin/login.php" class="btn-user-avatar" title="Portal Petugas / Login Admin" aria-label="Portal Petugas">
+                        <?= getIcon('user') ?>
                     </a>
                 </div>
             </div>

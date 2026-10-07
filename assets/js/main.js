@@ -3,127 +3,180 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Frontend JavaScript Logic (Clean Corporate & Responsive)
+ * Frontend JavaScript Logic (Live Filter, Pagination, Fast Search)
  * ============================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterKecamatan = document.getElementById('filterKecamatan');
-    const tabButtons = document.querySelectorAll('.tab-nav-btn');
-    const noticeEntries = document.querySelectorAll('.bulletin-card');
+    const btnFilterSubmit = document.getElementById('btnFilterSubmit');
+    const statusPillBtns = document.querySelectorAll('.status-pill-btn');
+    const noticeCards = Array.from(document.querySelectorAll('.bulletin-card'));
     const emptyState = document.getElementById('emptyState');
+    const paginationContainer = document.getElementById('pamPagination');
+    const pageNumberContainer = document.getElementById('pageNumberContainer');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
 
-    let currentTab = 'aktif'; // 'aktif' | 'semua' | 'selesai'
+    const PAGE_SIZE = 6;
+    let currentPage = 1;
+    let currentStatusTab = 'semua';
+    let matchingCards = [...noticeCards];
 
-    function filterNotices() {
+    function applyFilters() {
         const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
         const selectedKecamatan = (filterKecamatan ? filterKecamatan.value : '').toLowerCase().trim();
-        let visibleCount = 0;
 
-        noticeEntries.forEach(entry => {
-            const title = (entry.getAttribute('data-title') || '').toLowerCase();
-            const wilayah = (entry.getAttribute('data-wilayah') || '').toLowerCase();
-            const kecamatan = (entry.getAttribute('data-kecamatan') || '').toLowerCase();
-            const status = (entry.getAttribute('data-status') || '').toLowerCase();
-            const ticket = (entry.getAttribute('data-ticket') || '').toLowerCase();
+        matchingCards = noticeCards.filter(card => {
+            const title = (card.getAttribute('data-title') || '').toLowerCase();
+            const wilayah = (card.getAttribute('data-wilayah') || '').toLowerCase();
+            const kecamatan = (card.getAttribute('data-kecamatan') || '').toLowerCase();
+            const status = (card.getAttribute('data-status') || '').toLowerCase();
+            const ticket = (card.getAttribute('data-ticket') || '').toLowerCase();
 
-            // Match tab filter
-            let matchTab = true;
-            if (currentTab === 'aktif') {
-                matchTab = (status !== 'selesai');
-            } else if (currentTab === 'selesai') {
-                matchTab = (status === 'selesai');
+            // 1. Status Filter
+            let matchStatus = true;
+            if (currentStatusTab !== 'semua') {
+                matchStatus = (status === currentStatusTab);
             }
 
-            // Match search query
-            const matchSearch = !query || 
+            // 2. Query Search
+            const matchQuery = !query || 
                 title.includes(query) || 
                 wilayah.includes(query) || 
-                kecamatan.includes(query) ||
+                kecamatan.includes(query) || 
                 ticket.includes(query);
 
-            // Match kecamatan dropdown
+            // 3. Kecamatan Filter
             const matchKecamatan = !selectedKecamatan || kecamatan === selectedKecamatan;
 
-            if (matchTab && matchSearch && matchKecamatan) {
-                entry.style.display = 'block';
-                visibleCount++;
-            } else {
-                entry.style.display = 'none';
-            }
+            return matchStatus && matchQuery && matchKecamatan;
         });
 
+        currentPage = 1;
+        renderPaginatedView();
+    }
+
+    function renderPaginatedView() {
+        const totalItems = matchingCards.length;
+        const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        // Hide all cards first
+        noticeCards.forEach(card => card.style.display = 'none');
+
+        // Show slice for current page
+        const startIdx = (currentPage - 1) * PAGE_SIZE;
+        const endIdx = startIdx + PAGE_SIZE;
+        const pageItems = matchingCards.slice(startIdx, endIdx);
+
+        pageItems.forEach(card => {
+            card.style.display = 'flex';
+        });
+
+        // Toggle Empty State
         if (emptyState) {
-            emptyState.style.display = (visibleCount === 0) ? 'block' : 'none';
+            emptyState.style.display = (totalItems === 0) ? 'block' : 'none';
+        }
+
+        // Render Pagination UI
+        renderPaginationControls(totalPages);
+    }
+
+    function renderPaginationControls(totalPages) {
+        if (!paginationContainer || !pageNumberContainer) return;
+
+        if (totalPages <= 1) {
+            paginationContainer.style.display = 'none';
+            return;
+        }
+
+        paginationContainer.style.display = 'flex';
+        pageNumberContainer.innerHTML = '';
+
+        if (prevPageBtn) {
+            prevPageBtn.disabled = (currentPage === 1);
+            prevPageBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPaginatedView();
+                    scrollToGrid();
+                }
+            };
+        }
+
+        if (nextPageBtn) {
+            nextPageBtn.disabled = (currentPage === totalPages);
+            nextPageBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPaginatedView();
+                    scrollToGrid();
+                }
+            };
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `pam-page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.textContent = i;
+            btn.onclick = () => {
+                currentPage = i;
+                renderPaginatedView();
+                scrollToGrid();
+            };
+            pageNumberContainer.appendChild(btn);
         }
     }
 
-    // Search Input Listener
+    function scrollToGrid() {
+        const grid = document.getElementById('announcementGrid');
+        if (grid) {
+            const topPos = grid.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({ top: topPos, behavior: 'smooth' });
+        }
+    }
+
+    // Event Listeners
     if (searchInput) {
-        searchInput.addEventListener('input', filterNotices);
-        searchInput.addEventListener('keyup', filterNotices);
+        searchInput.addEventListener('input', applyFilters);
     }
 
-    // Kecamatan Dropdown Listener
     if (filterKecamatan) {
-        filterKecamatan.addEventListener('change', filterNotices);
+        filterKecamatan.addEventListener('change', applyFilters);
     }
 
-    // Status Tab Buttons Listener
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            tabButtons.forEach(b => {
-                b.classList.remove('active');
-                b.classList.remove('btn-primary');
-                b.classList.add('btn-outline-primary');
-            });
+    if (btnFilterSubmit) {
+        btnFilterSubmit.addEventListener('click', applyFilters);
+    }
+
+    statusPillBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            statusPillBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            btn.classList.remove('btn-outline-primary');
-            btn.classList.add('btn-primary');
-            currentTab = btn.getAttribute('data-tab') || 'aktif';
-            filterNotices();
+            currentStatusTab = btn.getAttribute('data-tab') || 'semua';
+            applyFilters();
         });
     });
 
-    // Share to WhatsApp Handler
-    window.shareToWA = function(ticket, title, kecamatan, wilayah, status, estimasi) {
-        const baseUrl = window.location.origin + window.location.pathname.replace('index.php', '');
-        const detailUrl = `${baseUrl}detail.php?tiket=${encodeURIComponent(ticket)}`;
-        
-        const message = 
-            `📢 *INFORMASI GANGGUAN AIR BERSIH*\n` +
-            `*PERUMDA AIR MINUM TIRTA INTAN GARUT*\n\n` +
-            `🔹 *No. Tiket*: #${ticket}\n` +
-            `🔹 *Perihal*: ${title}\n` +
-            `🔹 *Wilayah Pelayanan*: Kec. ${kecamatan}\n` +
-            `🔹 *Area Terdampak*:\n${wilayah}\n\n` +
-            `🔹 *Status*: ${status.toUpperCase()}\n` +
-            `🔹 *Estimasi Normal*: ${estimasi}\n\n` +
-            `🌐 *Pantau rincian resmi selengkapnya di*:\n${detailUrl}\n\n` +
-            `_Pusat Informasi & Pengaduan Perumda Tirta Intan Garut_`;
-
-        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(waUrl, '_blank');
+    window.resetFilters = function() {
+        if (searchInput) searchInput.value = '';
+        if (filterKecamatan) filterKecamatan.value = '';
+        statusPillBtns.forEach(b => {
+            if (b.getAttribute('data-tab') === 'semua') {
+                b.classList.add('active');
+            } else {
+                b.classList.remove('active');
+            }
+        });
+        currentStatusTab = 'semua';
+        applyFilters();
     };
 
-    // Copy Ticket Link Handler
-    window.copyLink = function(ticket) {
-        const baseUrl = window.location.origin + window.location.pathname.replace('index.php', '');
-        const url = `${baseUrl}detail.php?tiket=${encodeURIComponent(ticket)}`;
-
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(url).then(() => {
-                alert(`✅ Tautan pengumuman tiket #${ticket} berhasil disalin ke clipboard!`);
-            }).catch(() => {
-                prompt('Salin tautan pengumuman berikut:', url);
-            });
-        } else {
-            prompt('Salin tautan pengumuman berikut:', url);
-        }
-    };
-
-    // Initial filter run
-    filterNotices();
+    // Initial Execution
+    applyFilters();
 });

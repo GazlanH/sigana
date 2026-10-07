@@ -4,27 +4,20 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Papan Pengumuman Publik Resmi (Clean Corporate Design)
+ * Papan Pengumuman Publik Resmi (Clean Modern & Less Clutter)
  * ============================================================================
  */
 
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 
-$pageTitle = "Papan Pengumuman Gangguan Aliran Air";
+$pageTitle = "Informasi Gangguan Layanan";
 
-// 1. Statistik Ringkas
-$stat_aktif = $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status != 'selesai'")->fetchColumn();
-$stat_perbaikan = $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'perbaikan'")->fetchColumn();
-$stat_investigasi = $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'investigasi'")->fetchColumn();
-$stat_normalisasi = $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'normalisasi'")->fetchColumn();
-$stat_selesai = $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'selesai'")->fetchColumn();
-
-// 2. Daftar Kecamatan
+// 1. Ambil Data Kecamatan untuk Filter Dropdown
 $stmt_kecamatan = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamatan ASC");
 $daftar_kecamatan = $stmt_kecamatan->fetchAll();
 
-// 3. Daftar Pengumuman Lengkap
+// 2. Ambil Daftar Seluruh Pengumuman
 $query = "
     SELECT p.*, k.nama_kecamatan, k.cabang_pelayanan, u.nama_lengkap as nama_petugas
     FROM pengumuman p
@@ -45,195 +38,143 @@ $pengumuman_list = $stmt_pengumuman->fetchAll();
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<!-- Hero Banner Informasi Resmi -->
-<section class="hero-corporate-banner py-4 py-md-5">
+<!-- 1. Hero Header Banner (Vibrant Curved Ocean Blue) -->
+<section class="hero-header-banner">
     <div class="container">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <div class="d-inline-flex align-items-center gap-2 mb-2 bg-light px-3 py-1 rounded-pill border">
-                    <span class="pulse-indicator"></span>
-                    <span class="small fw-bold text-dark">Layanan Informasi Operasional Air Bersih Garut</span>
-                </div>
-                <h1 class="h3 fw-bold text-dark mb-2 lh-sm" style="letter-spacing: -0.02em;">
-                    Papan Informasi Pemeliharaan & Gangguan Pasokan Air
-                </h1>
-                <p class="text-muted small mb-0 pe-lg-4" style="line-height: 1.6;">
-                    Portal resmi Perumda Air Minum Tirta Intan Garut untuk memantau status pemeliharaan jaringan transmisi pipa, estimasi waktu penyelesaian, dan penyaluran armada tangki air darurat.
-                </p>
-            </div>
-
-            <!-- Status Counter Pills Grid -->
-            <div class="col-lg-5">
-                <div class="bg-light p-3 rounded-4 border">
-                    <div class="small fw-bold text-uppercase text-muted mb-2 ps-1" style="font-size: 0.72rem; letter-spacing: 0.05em;">
-                        Status Penanganan Lapangan
-                    </div>
-                    <div class="d-flex flex-wrap gap-2">
-                        <div class="stat-pill-chip danger">
-                            <?= getIcon('tool') ?> <span>Dalam Perbaikan: <strong><?= (int)$stat_perbaikan ?></strong></span>
-                        </div>
-                        <div class="stat-pill-chip info">
-                            <?= getIcon('clock') ?> <span>Normalisasi: <strong><?= (int)$stat_normalisasi ?></strong></span>
-                        </div>
-                        <?php if ($stat_investigasi > 0): ?>
-                            <div class="stat-pill-chip" style="background: #fffbeb; border-color: #fde68a; color: #92400e;">
-                                <?= getIcon('search') ?> <span>Investigasi: <strong><?= (int)$stat_investigasi ?></strong></span>
-                            </div>
-                        <?php endif; ?>
-                        <div class="stat-pill-chip success">
-                            <?= getIcon('check') ?> <span>Selesai: <strong><?= (int)$stat_selesai ?></strong></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <h1 class="hero-title">Informasi Gangguan Layanan</h1>
+        <div class="hero-breadcrumb">
+            <a href="index.php">Home</a>
+            <span>&rsaquo;</span>
+            <span>Gangguan Layanan</span>
         </div>
     </div>
 </section>
 
-<!-- Filter & Pencarian Cepat -->
-<section class="container my-3 my-md-4">
-    <div class="filter-search-card p-3 p-md-3">
-        <div class="row g-2 align-items-center">
-            <!-- Search Input -->
-            <div class="col-12 col-md-5">
-                <div class="input-group search-input-group">
-                    <span class="input-group-text bg-white border-end-0 text-muted ps-3"><?= getIcon('search') ?></span>
-                    <input type="text" id="searchInput" class="form-control border-start-0 ps-2" placeholder="Cari nama jalan, perumahan, kelurahan, atau nomor tiket...">
-                </div>
+<!-- 2. Main Content Container -->
+<main class="container mb-5">
+    <!-- Floating Filter & Search Card -->
+    <div class="filter-search-card">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-5 col-md-6">
+                <label for="searchInput" class="filter-input-label">Info Gangguan</label>
+                <input type="text" id="searchInput" class="filter-control-input" placeholder="Cari Informasi Gangguan..." autocomplete="off">
             </div>
-
-            <!-- Select Kecamatan -->
-            <div class="col-12 col-md-4">
-                <select id="filterKecamatan" class="form-select form-select-corporate">
-                    <option value="">Semua Wilayah Kecamatan (<?= count($daftar_kecamatan) ?>)</option>
+            <div class="col-lg-4 col-md-6">
+                <label for="filterKecamatan" class="filter-input-label">Kecamatan</label>
+                <select id="filterKecamatan" class="filter-control-select">
+                    <option value="">Pilih Kecamatan</option>
                     <?php foreach ($daftar_kecamatan as $kec): ?>
                         <option value="<?= strtolower(clean($kec['nama_kecamatan'])) ?>">
-                            Kecamatan <?= clean($kec['nama_kecamatan']) ?> (<?= clean($kec['cabang_pelayanan']) ?>)
+                            Kec. <?= clean($kec['nama_kecamatan']) ?> (<?= clean($kec['cabang_pelayanan']) ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
-
-            <!-- Status Filter Segmented Button -->
-            <div class="col-12 col-md-3 text-md-end">
-                <div class="btn-group w-100" role="group" aria-label="Filter Status">
-                    <button type="button" class="btn btn-primary btn-sm tab-nav-btn active" data-tab="aktif">Aktif (<?= (int)$stat_aktif ?>)</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm tab-nav-btn" data-tab="selesai">Selesai (<?= (int)$stat_selesai ?>)</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm tab-nav-btn" data-tab="semua">Semua</button>
-                </div>
+            <div class="col-lg-3 col-md-12">
+                <button type="button" id="btnFilterSubmit" class="btn-filter-action">
+                    <?= getIcon('filter') ?> <span>Filter</span>
+                </button>
             </div>
         </div>
+
+        <!-- Quick Status Filter Pills -->
+        <div class="status-pill-tabs">
+            <button type="button" class="status-pill-btn active" data-tab="semua">Semua Status</button>
+            <button type="button" class="status-pill-btn" data-tab="perbaikan">Dalam Perbaikan</button>
+            <button type="button" class="status-pill-btn" data-tab="investigasi">Investigasi</button>
+            <button type="button" class="status-pill-btn" data-tab="normalisasi">Normalisasi</button>
+            <button type="button" class="status-pill-btn" data-tab="selesai">Selesai</button>
+        </div>
     </div>
-</section>
 
-<!-- Daftar Pengumuman -->
-<main class="container mb-5">
-    <div class="d-flex flex-column gap-3" id="noticesContainer">
-        <?php if (empty($pengumuman_list)): ?>
-            <div class="card shadow-sm border text-center p-5 rounded-4 bg-white">
-                <div class="text-success mb-2" style="font-size: 2.5rem;">
-                    <?= getIcon('check') ?>
-                </div>
-                <h3 class="h5 fw-bold text-dark mb-1">Aliran Pasokan Air Berjalan Normal</h3>
-                <p class="text-muted small mb-0">Saat ini tidak ada laporan pemeliharaan atau gangguan pipa di wilayah pelayanan Perumda Tirta Intan Garut.</p>
-            </div>
-        <?php else: ?>
-            <?php foreach ($pengumuman_list as $row): 
-                $cardStatusClass = 'card-' . strtolower(clean($row['status']));
-            ?>
-                <article class="card bulletin-card <?= $cardStatusClass ?>"
-                    data-title="<?= clean($row['judul']) ?>"
-                    data-wilayah="<?= clean($row['wilayah_terdampak']) ?>"
-                    data-kecamatan="<?= strtolower(clean($row['nama_kecamatan'])) ?>"
-                    data-status="<?= strtolower(clean($row['status'])) ?>"
-                    data-ticket="<?= clean($row['nomor_tiket']) ?>"
-                >
-                    <div class="card-body p-3 p-md-4">
-                        <!-- Top Metadata Bar -->
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 pb-2 border-bottom">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="ticket-tag">#<?= clean($row['nomor_tiket']) ?></span>
-                                <?= renderStatusBadge($row['status']) ?>
-                                <?= renderDampakBadge($row['dampak_aliran']) ?>
-                            </div>
-                            <div class="text-muted small d-flex align-items-center gap-1">
-                                <?= getIcon('clock') ?> <span>Mulai Gangguan:</span> <strong class="text-dark"><?= formatTanggalIndo($row['waktu_mulai'], true) ?></strong>
-                            </div>
-                        </div>
-
-                        <!-- Title & Service Branch Subtitle -->
-                        <div class="mb-3">
-                            <h2 class="bulletin-title mb-1"><?= clean($row['judul']) ?></h2>
-                            <div class="text-muted small d-flex align-items-center gap-1 flex-wrap">
-                                <span class="text-primary fw-semibold"><?= getIcon('pin') ?> Wilayah Pelayanan:</span>
-                                <strong class="text-dark">Kecamatan <?= clean($row['nama_kecamatan']) ?></strong>
-                                <span class="badge bg-light text-secondary border px-2 py-0" style="font-size: 0.72rem;"><?= clean($row['cabang_pelayanan']) ?></span>
-                            </div>
-                        </div>
-
-                        <!-- Area Terdampak Callout -->
-                        <div class="bulletin-area-box mb-3">
-                            <strong><?= getIcon('pin') ?> Wilayah / Jalan Terdampak:</strong>
-                            <div class="mt-1"><?= nl2br(clean($row['wilayah_terdampak'])) ?></div>
-                        </div>
-
-                        <!-- Grid: Penyebab & Tindakan -->
-                        <div class="row g-2 mb-3">
-                            <div class="col-md-6">
-                                <div class="bulletin-mini-box cause h-100">
-                                    <div class="bulletin-mini-label"><?= getIcon('warning') ?> Penyebab Gangguan</div>
-                                    <div><?= clean($row['penyebab']) ?></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="bulletin-mini-box action h-100">
-                                    <div class="bulletin-mini-label"><?= getIcon('tool') ?> Tindakan Lapangan</div>
-                                    <div><?= clean($row['tindakan']) ?></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer: Estimasi & Actions -->
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 border-top">
-                            <div class="info-block-eta <?= $row['status'] === 'selesai' ? 'selesai' : '' ?>">
-                                <?= $row['status'] === 'selesai' ? getIcon('check') : getIcon('clock') ?>
-                                <span><?= $row['status'] === 'selesai' ? 'Status Pekerjaan:' : 'Estimasi Normalisasi:' ?></span>
-                                <strong>
-                                    <?= $row['status'] === 'selesai' ? 'Pekerjaan Selesai (Aliran Air Normal)' : formatTanggalIndo($row['estimasi_selesai'], true) ?>
-                                </strong>
-                            </div>
-
-                            <div class="d-flex gap-2 bulletin-action-btns">
-                                <a href="detail.php?tiket=<?= urlencode($row['nomor_tiket']) ?>" class="btn btn-outline-primary btn-sm fw-semibold">
-                                    Rincian Lengkap
+    <!-- 3. Announcement Cards Grid (Clean 2 Columns) -->
+    <div class="announcement-grid" id="announcementGrid">
+        <?php if (!empty($pengumuman_list)): ?>
+            <?php foreach ($pengumuman_list as $item): ?>
+                <div class="pam-card bulletin-card"
+                     data-title="<?= clean($item['judul']) ?>"
+                     data-wilayah="<?= clean($item['wilayah_terdampak']) ?>"
+                     data-kecamatan="<?= strtolower(clean($item['nama_kecamatan'])) ?>"
+                     data-status="<?= strtolower(clean($item['status'])) ?>"
+                     data-ticket="<?= clean($item['nomor_tiket']) ?>">
+                    
+                    <div>
+                        <div class="pam-card-header">
+                            <h2 class="pam-card-title">
+                                <a href="detail.php?tiket=<?= urlencode($item['nomor_tiket']) ?>">
+                                    <?= clean($item['judul']) ?>
                                 </a>
-                                <button type="button" class="btn btn-success btn-sm fw-semibold d-inline-flex align-items-center gap-1"
-                                    onclick="shareToWA(
-                                        '<?= clean($row['nomor_tiket']) ?>',
-                                        '<?= addslashes(clean($row['judul'])) ?>',
-                                        '<?= addslashes(clean($row['nama_kecamatan'])) ?>',
-                                        '<?= addslashes(clean($row['wilayah_terdampak'])) ?>',
-                                        '<?= addslashes(clean($row['status'])) ?>',
-                                        '<?= addslashes(formatTanggalIndo($row['estimasi_selesai'], true)) ?>'
-                                    )"
-                                >
-                                    <?= getIcon('whatsapp') ?> <span>Bagikan WA</span>
-                                </button>
+                            </h2>
+                            <div class="pam-badge-row">
+                                <?= renderStatusBadge($item['status']) ?>
+                                <?= renderDampakBadge($item['dampak_aliran']) ?>
+                            </div>
+                        </div>
+
+                        <div class="pam-meta-list">
+                            <!-- Schedule / Date Range -->
+                            <div class="pam-meta-item">
+                                <span class="meta-icon"><?= getIcon('calendar') ?></span>
+                                <span>
+                                    <?= formatTanggalIndo($item['waktu_mulai']) ?>
+                                    <?php if (!empty($item['estimasi_selesai'])): ?>
+                                        s/d <?= formatTanggalIndo($item['estimasi_selesai']) ?>
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+
+                            <!-- Location / Affected Areas -->
+                            <div class="pam-meta-item location">
+                                <span class="meta-icon"><?= getIcon('pin') ?></span>
+                                <span>
+                                    <strong>Kec. <?= clean($item['nama_kecamatan']) ?></strong> &bull; <?= clean($item['wilayah_terdampak']) ?>
+                                </span>
                             </div>
                         </div>
                     </div>
-                </article>
-            <?php endforeach; ?>
 
-            <!-- State Ketika Filter Kosong -->
-            <div id="emptyState" class="card shadow-sm border text-center p-4 rounded-4 bg-white" style="display:none;">
-                <div class="text-muted mb-2" style="font-size: 2rem;">
-                    <?= getIcon('search') ?>
+                    <div class="pam-card-footer">
+                        <a href="detail.php?tiket=<?= urlencode($item['nomor_tiket']) ?>" class="pam-link-more">
+                            <span>Selengkapnya</span>
+                            <?= getIcon('arrow-up-right') ?>
+                        </a>
+                    </div>
                 </div>
-                <h4 class="h6 fw-bold text-dark mb-1">Pengumuman Tidak Ditemukan</h4>
-                <p class="text-muted small mb-0">Tidak ada pengumuman yang sesuai dengan kata kunci pencarian atau filter wilayah kecamatan yang dipilih.</p>
-            </div>
+            <?php endforeach; ?>
         <?php endif; ?>
+    </div>
+
+    <!-- Empty Search State -->
+    <div id="emptyState" class="text-center py-5 my-4" style="display: <?= empty($pengumuman_list) ? 'block' : 'none' ?>;">
+        <div class="card border-0 shadow-sm p-4 p-md-5 mx-auto rounded-4 bg-white" style="max-width: 520px;">
+            <div class="text-primary mb-3" style="font-size: 2.5rem;"><?= getIcon('search') ?></div>
+            <h3 class="h5 fw-bold text-dark mb-2">Tidak Ada Pengumuman Ditemukan</h3>
+            <p class="text-muted small mb-3">Tidak ada data gangguan yang sesuai dengan kriteria pencarian atau filter yang dipilih.</p>
+            <div>
+                <button type="button" class="btn btn-outline-primary btn-sm px-3" onclick="window.resetFilters()">
+                    Reset Pencarian
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Clean Pagination Buttons -->
+    <div class="pam-pagination" id="pamPagination">
+        <button type="button" class="pam-page-btn" id="prevPageBtn" aria-label="Halaman Sebelumnya">&lsaquo;</button>
+        <div id="pageNumberContainer" class="d-inline-flex gap-2">
+            <!-- Dynamically rendered by JS -->
+        </div>
+        <button type="button" class="pam-page-btn" id="nextPageBtn" aria-label="Halaman Berikutnya">&rsaquo;</button>
+    </div>
+
+    <!-- 5. Bottom Callout Banner (Engaging & Clean) -->
+    <div class="pam-cta-banner">
+        <h3>Dapatkan Layanan Air Minum Sekarang!</h3>
+        <p>Laporkan gangguan aliran air atau ajukan permohonan bantuan armada tangki air darurat ke Perumda Air Minum Tirta Intan Garut.</p>
+        <a href="https://wa.me/6281123456789?text=Halo%20Perumda%20Tirta%20Intan,%20saya%20ingin%20lapor%20gangguan%20air" target="_blank" class="btn-cta-action">
+            <span>Hubungi Posko Pelayanan</span>
+            <?= getIcon('arrow-up-right') ?>
+        </a>
     </div>
 </main>
 

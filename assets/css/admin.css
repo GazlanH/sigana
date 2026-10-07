@@ -1,164 +1,190 @@
 /* ==========================================================================
-   SIGANA - PERUMDA AIR MINUM TIRTA INTAN GARUT
-   Admin Panel Stylesheet (Pure Native PHP Theme)
+   SIGANA - ADMIN PANEL STYLESHEET (Clean Modern Dashboard)
+   Less Clutter, Beautiful Typography, Spacious UI
    ========================================================================== */
 
 :root {
-  --admin-primary: #0d6efd;
-  --admin-dark: #0f172a;
+  --admin-sidebar-w: 260px;
+  --admin-topbar-h: 68px;
+  --admin-bg: #f8fafc;
+  --admin-navy: #003049;
+  --admin-primary: #0284c7;
+  --admin-primary-dark: #0369a1;
+  --admin-card-radius: 16px;
+  --admin-border: #edf2f7;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--admin-bg);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #1e293b;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Brand Logo */
-.brand-logo-img-sm {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  border-radius: 50%;
-  flex-shrink: 0;
+/* 1. Admin Topbar */
+.admin-topbar {
+  height: var(--admin-topbar-h);
   background: #ffffff;
+  border-bottom: 1px solid var(--admin-border);
+  position: sticky;
+  top: 0;
+  z-index: 990;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-/* Desktop Navbar Links */
+.brand-logo-img-sm {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* Desktop Nav Menu */
 .admin-desktop-nav {
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .admin-nav-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: #475569;
+  color: #64748b;
   text-decoration: none;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
   transition: all 0.15s ease;
 }
 
 .admin-nav-link:hover {
+  background-color: #f1f5f9;
   color: #0f172a;
-  background: #ffffff;
-  text-decoration: none;
 }
 
 .admin-nav-link.active {
-  color: #ffffff;
-  background: #0d6efd;
-  box-shadow: 0 1px 3px rgba(13, 110, 253, 0.3);
+  background-color: #e0f2fe;
+  color: var(--admin-primary);
+  font-weight: 700;
 }
 
-/* Mobile Drawer Links */
+/* 2. Stat Cards */
+.admin-stat-card {
+  border-radius: var(--admin-card-radius);
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+.admin-stat-card.c-primary { border-top: 4px solid #0284c7; }
+.admin-stat-card.c-danger { border-top: 4px solid #ef4444; }
+.admin-stat-card.c-warning { border-top: 4px solid #f59e0b; }
+.admin-stat-card.c-success { border-top: 4px solid #10b981; }
+
+/* 3. Cards & Tables */
+.card {
+  border-radius: var(--admin-card-radius);
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 16px 20px;
+  font-weight: 700;
+}
+
+.table > :not(caption) > * > * {
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table td {
+  font-size: 0.88rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* 4. Form Controls */
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+/* 5. Buttons */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--admin-primary-dark);
+  border-color: var(--admin-primary-dark);
+}
+
+/* Mobile Drawer */
 .admin-drawer-link {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  font-size: 0.92rem;
+  color: #475569;
+  text-decoration: none;
   font-weight: 600;
-  color: #334155;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.15s ease;
-}
-
-.admin-drawer-link:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-  text-decoration: none;
+  font-size: 0.92rem;
+  border-radius: 10px;
 }
 
 .admin-drawer-link.active {
-  background: #0d6efd;
-  color: #ffffff;
-}
-
-/* Stat Cards */
-.admin-stat-card {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  border-radius: 8px;
-}
-
-.admin-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-}
-
-.admin-stat-card.c-primary {
-  border-left: 5px solid #0d6efd !important;
-}
-
-.admin-stat-card.c-danger {
-  border-left: 5px solid #dc3545 !important;
-}
-
-.admin-stat-card.c-warning {
-  border-left: 5px solid #ffc107 !important;
-}
-
-.admin-stat-card.c-success {
-  border-left: 5px solid #198754 !important;
-}
-
-/* Table Enhancements */
-.table-responsive {
-  border-radius: 6px;
-}
-
-.table th {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #64748b;
-  background-color: #f8fafc;
-  white-space: nowrap;
-}
-
-.table td {
-  vertical-align: middle;
-  font-size: 0.88rem;
-}
-
-.btn-action-touch {
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Form Styles */
-.form-label {
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 4px;
-}
-
-.form-label .req {
-  color: #dc3545;
-}
-
-.form-control,
-.form-select {
-  font-size: 0.9rem;
-  border-color: #cbd5e1;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+  background-color: #e0f2fe;
+  color: var(--admin-primary);
+  font-weight: 700;
 }

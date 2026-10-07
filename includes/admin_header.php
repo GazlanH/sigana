@@ -4,7 +4,7 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Header Panel Admin (Pure Native PHP)
+ * Header Panel Admin (Clean Modern & Uncluttered)
  * ============================================================================
  */
 
@@ -22,60 +22,68 @@ $flash = getFlash();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($pageTitle) ? clean($pageTitle) . ' - ' : '' ?>Panel Admin SIGANA | Tirta Intan Garut</title>
     <link rel="icon" type="image/png" href="../assets/img/logo.png">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap 5.3.3 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css?v=2.0">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=2.0">
+    
+    <!-- Admin Modern Styles -->
+    <link rel="stylesheet" href="../assets/css/style.css?v=3.0">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=3.0">
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-<!-- Navbar Utama Admin (Sleek, Simetris, Rapi) -->
-<header class="admin-topbar bg-white border-bottom shadow-sm sticky-top">
+<!-- Modern Admin Topbar -->
+<header class="admin-topbar bg-white border-bottom sticky-top">
     <div class="container-fluid px-3 px-md-4">
         <div class="d-flex justify-content-between align-items-center py-2">
             <!-- Brand Section -->
             <a class="d-flex align-items-center gap-2 text-decoration-none" href="index.php">
-                <img src="../assets/img/logo.png" alt="Logo" width="34" height="34" class="brand-logo-img-sm">
+                <img src="../assets/img/logo.png" alt="Logo" width="38" height="38" class="brand-logo-img-sm">
                 <div>
                     <div class="fw-bold text-dark fs-6 lh-1">SIGANA ADMIN</div>
                     <div class="small text-muted fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.02em;">PERUMDA TIRTA INTAN GARUT</div>
                 </div>
             </a>
 
-            <!-- Desktop Nav Menu (Tengah & Rapi) -->
+            <!-- Desktop Nav Menu (Centered & Clean) -->
             <nav class="d-none d-lg-flex align-items-center gap-1 admin-desktop-nav">
                 <a href="index.php" class="admin-nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>">
                     <?= getIcon('clock') ?> <span>Dashboard</span>
                 </a>
                 <a href="pengumuman.php" class="admin-nav-link <?= in_array($currentPage, ['pengumuman.php', 'edit.php']) ? 'active' : '' ?>">
-                    <?= getIcon('warning') ?> <span>Data Pengumuman</span>
+                    <?= getIcon('warning') ?> <span>Pengumuman</span>
                 </a>
                 <a href="tambah.php" class="admin-nav-link <?= $currentPage === 'tambah.php' ? 'active' : '' ?>">
-                    <?= getIcon('tool') ?> <span>Buat Pengumuman</span>
+                    <?= getIcon('plus') ?> <span>Buat Baru</span>
                 </a>
                 <a href="kecamatan.php" class="admin-nav-link <?= $currentPage === 'kecamatan.php' ? 'active' : '' ?>">
-                    <?= getIcon('pin') ?> <span>Wilayah Kecamatan</span>
+                    <?= getIcon('pin') ?> <span>Wilayah</span>
                 </a>
                 <a href="profil.php" class="admin-nav-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
-                    <?= getIcon('user') ?> <span>Akun Petugas</span>
+                    <?= getIcon('user') ?> <span>Profil</span>
                 </a>
             </nav>
 
-            <!-- User Info & Right Action Buttons -->
+            <!-- User Info & Actions -->
             <div class="d-flex align-items-center gap-2">
-                <a href="profil.php" class="d-none d-sm-block text-end me-1 text-decoration-none" title="Kelola Profil & Password">
+                <a href="profil.php" class="d-none d-sm-block text-end me-2 text-decoration-none">
                     <div class="fw-bold text-dark small lh-1"><?= clean($user['nama_lengkap']) ?></div>
                     <small class="text-muted" style="font-size: 0.72rem;"><?= clean($user['jabatan']) ?></small>
                 </a>
                 <a href="../index.php" target="_blank" class="btn btn-outline-secondary btn-sm d-none d-sm-inline-flex align-items-center gap-1">
-                    Lihat Web
+                    <?= getIcon('external') ?> <span>Lihat Web</span>
                 </a>
-                <a href="logout.php" class="btn btn-outline-danger btn-sm d-none d-sm-inline-flex align-items-center gap-1" onclick="return confirm('Apakah Anda yakin ingin keluar dari panel admin?')">
+                <a href="logout.php" class="btn btn-outline-danger btn-sm d-none d-sm-inline-flex align-items-center gap-1" onclick="return confirm('Yakin ingin keluar?')">
                     Keluar
                 </a>
 
-                <!-- Mobile Offcanvas Toggler -->
-                <button class="btn btn-light border d-lg-none p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminMobileDrawer" aria-controls="adminMobileDrawer" aria-label="Buka Menu">
+                <!-- Mobile Drawer Toggle -->
+                <button class="btn btn-light border d-lg-none p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminMobileDrawer" aria-label="Buka Menu">
                     <span class="d-flex flex-column gap-1" style="width: 18px;">
                         <span style="height: 2px; background: #334155; border-radius: 2px;"></span>
                         <span style="height: 2px; background: #334155; border-radius: 2px;"></span>
@@ -87,63 +95,46 @@ $flash = getFlash();
     </div>
 </header>
 
-<!-- Drawer Menu Khusus Layar Mobile -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="adminMobileDrawer" aria-labelledby="adminMobileDrawerLabel">
+<!-- Mobile Offcanvas Drawer -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="adminMobileDrawer">
     <div class="offcanvas-header border-bottom bg-light py-3">
-        <div class="d-flex align-items-center gap-2" id="adminMobileDrawerLabel">
-            <img src="../assets/img/logo.png" alt="Logo" width="32" height="32" class="brand-logo-img-sm">
+        <div class="d-flex align-items-center gap-2">
+            <img src="../assets/img/logo.png" alt="Logo" width="38" height="38" class="brand-logo-img-sm">
             <div>
                 <div class="fw-bold text-dark fs-6 lh-1">SIGANA ADMIN</div>
                 <small class="text-muted" style="font-size: 0.7rem;">PERUMDA TIRTA INTAN</small>
             </div>
         </div>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
-        <div>
-            <div class="small text-muted text-uppercase fw-bold mb-2 ps-2" style="font-size: 0.72rem; letter-spacing: 0.05em;">Menu Navigasi</div>
-            <div class="nav flex-column gap-1">
-                <a href="index.php" class="admin-drawer-link <?= $currentPage === 'index.php' ? 'active' : '' ?>">
-                    <?= getIcon('clock') ?> <span>Dashboard</span>
-                </a>
-                <a href="pengumuman.php" class="admin-drawer-link <?= in_array($currentPage, ['pengumuman.php', 'edit.php']) ? 'active' : '' ?>">
-                    <?= getIcon('warning') ?> <span>Data Pengumuman</span>
-                </a>
-                <a href="tambah.php" class="admin-drawer-link <?= $currentPage === 'tambah.php' ? 'active' : '' ?>">
-                    <?= getIcon('tool') ?> <span>Buat Pengumuman</span>
-                </a>
-                <a href="kecamatan.php" class="admin-drawer-link <?= $currentPage === 'kecamatan.php' ? 'active' : '' ?>">
-                    <?= getIcon('pin') ?> <span>Wilayah Kecamatan</span>
-                </a>
-                <a href="profil.php" class="admin-drawer-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
-                    <?= getIcon('user') ?> <span>Akun Petugas</span>
-                </a>
-            </div>
+        <div class="nav flex-column gap-1">
+            <a href="index.php" class="admin-drawer-link <?= $currentPage === 'index.php' ? 'active' : '' ?>">
+                <?= getIcon('clock') ?> <span>Dashboard</span>
+            </a>
+            <a href="pengumuman.php" class="admin-drawer-link <?= in_array($currentPage, ['pengumuman.php', 'edit.php']) ? 'active' : '' ?>">
+                <?= getIcon('warning') ?> <span>Data Pengumuman</span>
+            </a>
+            <a href="tambah.php" class="admin-drawer-link <?= $currentPage === 'tambah.php' ? 'active' : '' ?>">
+                <?= getIcon('plus') ?> <span>Buat Pengumuman</span>
+            </a>
+            <a href="kecamatan.php" class="admin-drawer-link <?= $currentPage === 'kecamatan.php' ? 'active' : '' ?>">
+                <?= getIcon('pin') ?> <span>Wilayah Kecamatan</span>
+            </a>
+            <a href="profil.php" class="admin-drawer-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
+                <?= getIcon('user') ?> <span>Akun Petugas</span>
+            </a>
         </div>
-
-        <div class="pt-3 border-top">
-            <div class="p-2 bg-light rounded mb-3">
-                <small class="text-muted d-block" style="font-size: 0.72rem;">Petugas Login:</small>
-                <strong class="text-dark small"><?= clean($user['nama_lengkap']) ?></strong>
-                <div class="small text-muted"><?= clean($user['jabatan']) ?></div>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="../index.php" target="_blank" class="btn btn-outline-secondary btn-sm flex-fill">
-                    Lihat Web
-                </a>
-                <a href="logout.php" class="btn btn-danger btn-sm flex-fill" onclick="return confirm('Keluar dari panel admin?')">
-                    Keluar
-                </a>
-            </div>
+        <div class="border-top pt-3">
+            <a href="logout.php" class="btn btn-outline-danger w-100 btn-sm">Keluar</a>
         </div>
     </div>
 </div>
 
-<!-- Container Konten Admin -->
 <main class="container-fluid px-3 px-md-4 py-4 flex-grow-1">
     <?php if ($flash): ?>
         <div class="alert alert-<?= $flash['type'] === 'error' ? 'danger' : clean($flash['type']) ?> alert-dismissible fade show shadow-sm mb-4" role="alert">
             <?= clean($flash['text']) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>

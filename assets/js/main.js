@@ -1,15 +1,17 @@
 /**
- * ==========================================================
- * SIGANA - PERUMDA TIRTA INTAN GARUT
- * Main Frontend JavaScript (Bootstrap 5 Compatible)
- * ==========================================================
+ * ============================================================================
+ * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
+ * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
+ * ============================================================================
+ * Frontend JavaScript Logic (Clean Corporate & Responsive)
+ * ============================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterKecamatan = document.getElementById('filterKecamatan');
-    const tabButtons = document.querySelectorAll('.tab-nav-btn, .tab-btn, .tab-pill-btn');
-    const noticeEntries = document.querySelectorAll('.bulletin-card, .notice-entry, .notice-card');
+    const tabButtons = document.querySelectorAll('.tab-nav-btn');
+    const noticeEntries = document.querySelectorAll('.bulletin-card');
     const emptyState = document.getElementById('emptyState');
 
     let currentTab = 'aktif'; // 'aktif' | 'semua' | 'selesai'
@@ -57,18 +59,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Input Search Listener
+    // Search Input Listener
     if (searchInput) {
         searchInput.addEventListener('input', filterNotices);
         searchInput.addEventListener('keyup', filterNotices);
     }
 
-    // Dropdown Kecamatan Listener
+    // Kecamatan Dropdown Listener
     if (filterKecamatan) {
         filterKecamatan.addEventListener('change', filterNotices);
     }
 
-    // Tab Button Listeners
+    // Status Tab Buttons Listener
     tabButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -85,30 +87,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Share to WhatsApp Function
+    // Share to WhatsApp Handler
     window.shareToWA = function(ticket, title, kecamatan, wilayah, status, estimasi) {
-        const currentUrl = window.location.origin + window.location.pathname.replace('index.php', '') + 'detail.php?tiket=' + encodeURIComponent(ticket);
-        const text = `INFO GANGGUAN AIR PERUMDA TIRTA INTAN GARUT\n\n` +
-            `No. Tiket: ${ticket}\n` +
-            `Perihal: ${title}\n` +
-            `Kecamatan: ${kecamatan}\n` +
-            `Wilayah Terdampak: ${wilayah}\n` +
-            `Status Penanganan: ${status.toUpperCase()}\n` +
-            `Estimasi Selesai: ${estimasi}\n\n` +
-            `Informasi resmi selengkapnya di:\n${currentUrl}`;
+        const baseUrl = window.location.origin + window.location.pathname.replace('index.php', '');
+        const detailUrl = `${baseUrl}detail.php?tiket=${encodeURIComponent(ticket)}`;
+        
+        const message = 
+            `📢 *INFORMASI GANGGUAN AIR BERSIH*\n` +
+            `*PERUMDA AIR MINUM TIRTA INTAN GARUT*\n\n` +
+            `🔹 *No. Tiket*: #${ticket}\n` +
+            `🔹 *Perihal*: ${title}\n` +
+            `🔹 *Wilayah Pelayanan*: Kec. ${kecamatan}\n` +
+            `🔹 *Area Terdampak*:\n${wilayah}\n\n` +
+            `🔹 *Status*: ${status.toUpperCase()}\n` +
+            `🔹 *Estimasi Normal*: ${estimasi}\n\n` +
+            `🌐 *Pantau rincian resmi selengkapnya di*:\n${detailUrl}\n\n` +
+            `_Pusat Informasi & Pengaduan Perumda Tirta Intan Garut_`;
 
-        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
         window.open(waUrl, '_blank');
     };
 
-    // Copy Ticket Link
+    // Copy Ticket Link Handler
     window.copyLink = function(ticket) {
-        const url = window.location.origin + window.location.pathname.replace('index.php', '') + 'detail.php?tiket=' + encodeURIComponent(ticket);
-        navigator.clipboard.writeText(url).then(() => {
-            alert('Tautan pengumuman berhasil disalin ke clipboard.');
-        }).catch(() => {
-            prompt('Salin tautan berikut:', url);
-        });
+        const baseUrl = window.location.origin + window.location.pathname.replace('index.php', '');
+        const url = `${baseUrl}detail.php?tiket=${encodeURIComponent(ticket)}`;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert(`✅ Tautan pengumuman tiket #${ticket} berhasil disalin ke clipboard!`);
+            }).catch(() => {
+                prompt('Salin tautan pengumuman berikut:', url);
+            });
+        } else {
+            prompt('Salin tautan pengumuman berikut:', url);
+        }
     };
 
     // Initial filter run

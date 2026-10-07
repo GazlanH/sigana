@@ -1,13 +1,22 @@
 <?php
-$pageTitle = "Kelola Pengumuman";
+/**
+ * ============================================================================
+ * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
+ * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
+ * ============================================================================
+ * Kelola Seluruh Data Pengumuman (Pure Native PHP)
+ * ============================================================================
+ */
+
+$pageTitle = "Data Seluruh Pengumuman";
 require_once __DIR__ . '/../includes/admin_header.php';
 
-// Filter parameters
-$status_filter = $_GET['status'] ?? '';
-$kecamatan_filter = $_GET['kecamatan_id'] ?? '';
-$q = $_GET['q'] ?? '';
+// 1. Parameter Filter & Search
+$status_filter = trim($_GET['status'] ?? '');
+$kecamatan_filter = (int)($_GET['kecamatan_id'] ?? 0);
+$q = trim($_GET['q'] ?? '');
 
-// Build Query
+// 2. Query Dinamis
 $sql = "
     SELECT p.*, k.nama_kecamatan, k.cabang_pelayanan, u.nama_lengkap as nama_petugas
     FROM pengumuman p
@@ -22,7 +31,7 @@ if (!empty($status_filter)) {
     $params[] = $status_filter;
 }
 
-if (!empty($kecamatan_filter)) {
+if ($kecamatan_filter > 0) {
     $sql .= " AND p.kecamatan_id = ?";
     $params[] = $kecamatan_filter;
 }
@@ -42,32 +51,32 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $list_pengumuman = $stmt->fetchAll();
 
-// Ambil list kecamatan untuk filter dropdown
+// 3. Ambil opsi kecamatan untuk dropdown
 $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamatan ASC")->fetchAll();
 ?>
 
 <!-- Header Actions -->
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
     <div>
-        <h2 class="h4 fw-bold text-dark mb-1">Daftar Seluruh Pengumuman</h2>
-        <p class="text-muted small mb-0">Kelola info pemeliharaan pipa, update status teknis, dan estimasi waktu normalisasi.</p>
+        <h2 class="h4 fw-bold text-dark mb-1">Manajemen Pengumuman Gangguan</h2>
+        <p class="text-muted small mb-0">Kelola info pemeliharaan pipa, update kemajuan teknis, dan estimasi waktu normalisasi.</p>
     </div>
-    <a href="tambah.php" class="btn btn-primary fw-semibold shadow-sm">
-        <?= getIcon('tool') ?> + Buat Pengumuman Baru
+    <a href="tambah.php" class="btn btn-primary fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
+        <?= getIcon('plus') ?> <span>Buat Pengumuman Baru</span>
     </a>
 </div>
 
-<!-- Filter Box -->
+<!-- Filter & Search Box -->
 <div class="card shadow-sm border mb-3">
     <div class="card-body p-3">
         <form method="GET" action="pengumuman.php" class="row g-2 align-items-center">
             <div class="col-12 col-md-4">
-                <input type="text" name="q" class="form-control form-control-sm" placeholder="Cari judul, nomor tiket, atau jalan..." value="<?= clean($q) ?>">
+                <input type="text" name="q" class="form-control form-control-sm" placeholder="Cari judul, tiket, jalan, atau penyebab..." value="<?= clean($q) ?>">
             </div>
 
             <div class="col-6 col-md-3">
                 <select name="status" class="form-select form-select-sm">
-                    <option value="">Semua Status</option>
+                    <option value="">-- Semua Status --</option>
                     <option value="investigasi" <?= $status_filter === 'investigasi' ? 'selected' : '' ?>>Investigasi</option>
                     <option value="perbaikan" <?= $status_filter === 'perbaikan' ? 'selected' : '' ?>>Dalam Perbaikan</option>
                     <option value="normalisasi" <?= $status_filter === 'normalisasi' ? 'selected' : '' ?>>Normalisasi</option>
@@ -77,7 +86,7 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
 
             <div class="col-6 col-md-3">
                 <select name="kecamatan_id" class="form-select form-select-sm">
-                    <option value="">Semua Kecamatan</option>
+                    <option value="">-- Semua Kecamatan --</option>
                     <?php foreach ($kecamatan_options as $kec): ?>
                         <option value="<?= $kec['id'] ?>" <?= $kecamatan_filter == $kec['id'] ? 'selected' : '' ?>>
                             Kec. <?= clean($kec['nama_kecamatan']) ?>
@@ -87,10 +96,10 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
             </div>
 
             <div class="col-12 col-md-2 d-flex gap-1">
-                <button type="submit" class="btn btn-secondary btn-sm flex-fill">
-                    <?= getIcon('search') ?> Filter
+                <button type="submit" class="btn btn-secondary btn-sm flex-fill d-inline-flex align-items-center justify-content-center gap-1">
+                    <?= getIcon('search') ?> <span>Filter</span>
                 </button>
-                <?php if (!empty($q) || !empty($status_filter) || !empty($kecamatan_filter)): ?>
+                <?php if (!empty($q) || !empty($status_filter) || $kecamatan_filter > 0): ?>
                     <a href="pengumuman.php" class="btn btn-outline-danger btn-sm" title="Reset Filter">Reset</a>
                 <?php endif; ?>
             </div>
@@ -100,16 +109,23 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
 
 <!-- Main Table Card -->
 <div class="card shadow-sm border mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h3 class="h6 fw-bold mb-0 text-dark">Daftar Pengumuman (Ditemukan: <?= count($list_pengumuman) ?>)</h3>
+        <?php if (!empty($q) || !empty($status_filter) || $kecamatan_filter > 0): ?>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Filter Aktif</span>
+        <?php endif; ?>
+    </div>
+
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
-                        <th style="min-width: 110px;">Tiket</th>
-                        <th style="min-width: 220px;">Perihal & Wilayah Garut</th>
-                        <th style="min-width: 120px;">Dampak</th>
+                        <th style="min-width: 120px;">Nomor Tiket</th>
+                        <th style="min-width: 240px;">Perihal & Area Garut</th>
+                        <th style="min-width: 120px;">Dampak Air</th>
                         <th style="min-width: 130px;">Status</th>
-                        <th style="min-width: 140px;">Waktu & Estimasi</th>
+                        <th style="min-width: 150px;">Waktu & Estimasi</th>
                         <th style="min-width: 140px;" class="text-end">Aksi</th>
                     </tr>
                 </thead>
@@ -129,7 +145,7 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
                                 <td>
                                     <div class="fw-bold text-dark"><?= clean($row['judul']) ?></div>
                                     <div class="small text-muted">
-                                        <strong>Kec. <?= clean($row['nama_kecamatan']) ?></strong> &bull; <?= clean(mb_strimwidth($row['wilayah_terdampak'], 0, 45, '...')) ?>
+                                        <strong>Kec. <?= clean($row['nama_kecamatan']) ?></strong> &bull; <?= clean(mb_strimwidth($row['wilayah_terdampak'], 0, 50, '...')) ?>
                                     </div>
                                 </td>
                                 <td>
@@ -148,13 +164,13 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
                                 </td>
                                 <td class="text-end">
                                     <div class="d-inline-flex gap-1">
-                                        <a href="../detail.php?tiket=<?= urlencode($row['nomor_tiket']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm btn-action-touch" title="Pratinjau">
+                                        <a href="../detail.php?tiket=<?= urlencode($row['nomor_tiket']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm btn-action-touch" title="Lihat Pratinjau Publik">
                                             Lihat
                                         </a>
-                                        <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit">
+                                        <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Rincian Data">
                                             Edit
                                         </a>
-                                        <a href="hapus.php?id=<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm btn-action-touch confirm-delete" data-item="pengumuman #<?= clean($row['nomor_tiket']) ?>" title="Hapus">
+                                        <a href="hapus.php?id=<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm btn-action-touch confirm-delete" data-item="pengumuman #<?= clean($row['nomor_tiket']) ?>" title="Hapus Pengumuman">
                                             Hapus
                                         </a>
                                     </div>

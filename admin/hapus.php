@@ -1,4 +1,13 @@
 <?php
+/**
+ * ============================================================================
+ * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
+ * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
+ * ============================================================================
+ * Action Handler Hapus Pengumuman (Pure Native PHP)
+ * ============================================================================
+ */
+
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/functions.php';
 
@@ -20,12 +29,12 @@ try {
     if ($row) {
         $stmt_del = $pdo->prepare("DELETE FROM pengumuman WHERE id = ?");
         $stmt_del->execute([$id]);
-        setFlash('success', "Pengumuman #{$row['nomor_tiket']} berhasil dihapus dari sistem.");
+        setFlash('success', "Pengumuman tiket #{$row['nomor_tiket']} berhasil dihapus dari sistem.");
     } else {
         setFlash('error', 'Data pengumuman tidak ditemukan.');
     }
 } catch (PDOException $e) {
-    setFlash('error', 'Gagal menghapus data: ' . $e->getMessage());
+    setFlash('error', 'Gagal menghapus data pengumuman: ' . $e->getMessage());
 }
 
 header('Location: pengumuman.php');

@@ -1,4 +1,13 @@
 <?php
+/**
+ * ============================================================================
+ * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
+ * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
+ * ============================================================================
+ * Form Edit & Update Status Pengumuman (Pure Native PHP)
+ * ============================================================================
+ */
+
 $pageTitle = "Edit Pengumuman";
 require_once __DIR__ . '/../includes/admin_header.php';
 
@@ -15,7 +24,7 @@ $stmt->execute([$id]);
 $data = $stmt->fetch();
 
 if (!$data) {
-    setFlash('error', 'Data pengumuman tidak ditemukan.');
+    setFlash('error', 'Data pengumuman tidak ditemukan dalam sistem.');
     header('Location: pengumuman.php');
     exit;
 }
@@ -36,12 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $estimasi_selesai = trim($_POST['estimasi_selesai'] ?? '');
     $kontak_posko = trim($_POST['kontak_posko'] ?? '0811-2345-6789');
 
+    // Validasi
     if (empty($judul)) $errors[] = 'Judul perihal gangguan wajib diisi.';
-    if ($kecamatan_id <= 0) $errors[] = 'Pilih kecamatan wilayah terdampak.';
-    if (empty($wilayah_terdampak)) $errors[] = 'Rincian wilayah terdampak wajib diisi.';
-    if (empty($penyebab)) $errors[] = 'Penyebab gangguan wajib diisi.';
-    if (empty($tindakan)) $errors[] = 'Langkah perbaikan wajib diisi.';
-    if (empty($waktu_mulai)) $errors[] = 'Waktu mulai kejadian wajib ditentukan.';
+    if ($kecamatan_id <= 0) $errors[] = 'Pilih salah satu wilayah kecamatan.';
+    if (empty($wilayah_terdampak)) $errors[] = 'Rincian wilayah/jalan terdampak wajib diisi.';
+    if (empty($penyebab)) $errors[] = 'Penyebab teknis gangguan wajib diisi.';
+    if (empty($tindakan)) $errors[] = 'Langkah tindakan perbaikan wajib diisi.';
+    if (empty($waktu_mulai)) $errors[] = 'Waktu mulai kejadian gangguan wajib ditentukan.';
 
     if (empty($errors)) {
         try {
@@ -57,7 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     waktu_mulai = ?,
                     estimasi_selesai = ?,
                     kontak_posko = ?,
-                    waktu_selesai_aktual = CASE WHEN ? = 'selesai' AND waktu_selesai_aktual IS NULL THEN NOW() ELSE waktu_selesai_aktual END
+                    waktu_selesai_aktual = CASE 
+                        WHEN ? = 'selesai' AND waktu_selesai_aktual IS NULL THEN NOW() 
+                        WHEN ? != 'selesai' THEN NULL
+                        ELSE waktu_selesai_aktual 
+                    END
                 WHERE id = ?
             ";
             $stmt_up = $pdo->prepare($update_sql);
@@ -73,10 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 !empty($estimasi_selesai) ? $estimasi_selesai : null,
                 $kontak_posko,
                 $status,
+                $status,
                 $id
             ]);
 
-            setFlash('success', "Pengumuman #{$data['nomor_tiket']} berhasil diperbarui!");
+            setFlash('success', "Pengumuman tiket #{$data['nomor_tiket']} berhasil diperbarui!");
             header('Location: pengumuman.php');
             exit;
         } catch (PDOException $e) {
@@ -88,18 +103,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
     <div>
-        <h2 class="h4 fw-bold text-dark mb-1">Edit Tiket #<?= clean($data['nomor_tiket']) ?></h2>
-        <p class="text-muted small mb-0">Perbarui rincian teknis dan status kemajuan perbaikan.</p>
+        <h2 class="h4 fw-bold text-dark mb-1">Edit Pengumuman Tiket #<?= clean($data['nomor_tiket']) ?></h2>
+        <p class="text-muted small mb-0">Perbarui rincian teknis, progress perbaikan, dan status waktu normalisasi.</p>
     </div>
     <div class="d-flex gap-2">
-        <a href="../detail.php?tiket=<?= urlencode($data['nomor_tiket']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm">Lihat Web</a>
-        <a href="pengumuman.php" class="btn btn-outline-secondary btn-sm">&larr; Kembali</a>
+        <a href="../detail.php?tiket=<?= urlencode($data['nomor_tiket']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
+            Lihat Web
+        </a>
+        <a href="pengumuman.php" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
+            &larr; <span>Kembali</span>
+        </a>
     </div>
 </div>
 
 <?php if (!empty($errors)): ?>
-    <div class="alert alert-danger shadow-sm">
-        <strong class="d-block mb-1">Terjadi kesalahan:</strong>
+    <div class="alert alert-danger shadow-sm mb-3">
+        <strong class="d-block mb-1">Harap perbaiki beberapa isian form berikut:</strong>
         <ul class="mb-0 ps-3">
             <?php foreach ($errors as $err): ?>
                 <li><?= clean($err) ?></li>
@@ -114,16 +133,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="row g-3">
                 <!-- Nomor Tiket (Read Only) -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label">Nomor Tiket</label>
+                    <label class="form-label">Nomor Tiket (Permanen)</label>
                     <input type="text" class="form-control bg-light fw-bold text-primary" value="<?= clean($data['nomor_tiket']) ?>" readonly>
                 </div>
 
                 <!-- Kecamatan Terdampak -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label" for="kecamatan_id">Kecamatan Wilayah Pelayanan <span class="req">*</span></label>
+                    <label class="form-label" for="kecamatan_id">Wilayah Kecamatan Pelayanan <span class="req">*</span></label>
                     <select id="kecamatan_id" name="kecamatan_id" class="form-select" required>
                         <?php foreach ($list_kecamatan as $kec): ?>
-                            <option value="<?= $kec['id'] ?>" <?= $data['kecamatan_id'] == $kec['id'] ? 'selected' : '' ?>>
+                            <option value="<?= $kec['id'] ?>" <?= ((int)$data['kecamatan_id'] === (int)$kec['id']) ? 'selected' : '' ?>>
                                 Kecamatan <?= clean($kec['nama_kecamatan']) ?> (<?= clean($kec['cabang_pelayanan']) ?>)
                             </option>
                         <?php endforeach; ?>
@@ -144,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Penyebab Gangguan -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label" for="penyebab">Penyebab Gangguan <span class="req">*</span></label>
+                    <label class="form-label" for="penyebab">Penyebab Gangguan Teknis <span class="req">*</span></label>
                     <textarea id="penyebab" name="penyebab" class="form-control" rows="3" required><?= clean($data['penyebab']) ?></textarea>
                 </div>
 
@@ -166,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Status Penanganan -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label" for="status">Status Terkini <span class="req">*</span></label>
+                    <label class="form-label" for="status">Status Penanganan Terkini <span class="req">*</span></label>
                     <select id="status" name="status" class="form-select" required>
                         <option value="investigasi" <?= $data['status'] === 'investigasi' ? 'selected' : '' ?>>Investigasi Lapangan</option>
                         <option value="perbaikan" <?= $data['status'] === 'perbaikan' ? 'selected' : '' ?>>Sedang Dalam Proses Perbaikan</option>
@@ -177,13 +196,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Waktu Mulai -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label" for="waktu_mulai">Waktu Mulai Gangguan <span class="req">*</span></label>
+                    <label class="form-label" for="waktu_mulai">Waktu Mulai Kejadian Gangguan <span class="req">*</span></label>
                     <input type="datetime-local" id="waktu_mulai" name="waktu_mulai" class="form-control" value="<?= date('Y-m-d\TH:i', strtotime($data['waktu_mulai'])) ?>" required>
                 </div>
 
                 <!-- Estimasi Selesai -->
                 <div class="col-12 col-md-6">
-                    <label class="form-label" for="estimasi_selesai">Estimasi Selesai Normal</label>
+                    <label class="form-label" for="estimasi_selesai">Estimasi Waktu Normal Kembali</label>
                     <input type="datetime-local" id="estimasi_selesai" name="estimasi_selesai" class="form-control" value="<?= !empty($data['estimasi_selesai']) ? date('Y-m-d\TH:i', strtotime($data['estimasi_selesai'])) : '' ?>">
                 </div>
 
@@ -194,10 +213,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 pt-3 mt-3 border-top">
+            <div class="d-flex justify-content-end gap-2 pt-3 mt-4 border-top">
                 <a href="pengumuman.php" class="btn btn-secondary">Batal</a>
-                <button type="submit" class="btn btn-primary fw-semibold">
-                    Simpan Perubahan
+                <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-1">
+                    <?= getIcon('check') ?> <span>Simpan Perubahan</span>
                 </button>
             </div>
         </form>

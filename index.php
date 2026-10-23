@@ -52,17 +52,13 @@ require_once __DIR__ . '/includes/header.php';
 
 <!-- 2. Main Content Container -->
 <main class="container mb-5">
-    <!-- Floating Filter & Search Card -->
+    <!-- Floating Filter & Selection Card -->
     <div class="filter-search-card">
         <div class="row g-3 align-items-end">
             <div class="col-lg-5 col-md-6">
-                <label for="searchInput" class="filter-input-label">Info Gangguan</label>
-                <input type="text" id="searchInput" class="filter-control-input" placeholder="Cari Informasi Gangguan..." autocomplete="off">
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <label for="filterKecamatan" class="filter-input-label">Kecamatan</label>
+                <label for="filterKecamatan" class="filter-input-label">Wilayah Kecamatan</label>
                 <select id="filterKecamatan" class="filter-control-select">
-                    <option value="">Pilih Kecamatan</option>
+                    <option value="">Semua Kecamatan di Garut</option>
                     <?php foreach ($daftar_kecamatan as $kec): ?>
                         <option value="<?= strtolower(clean($kec['nama_kecamatan'])) ?>">
                             Kec. <?= clean($kec['nama_kecamatan']) ?> (<?= clean($kec['cabang_pelayanan']) ?>)
@@ -70,9 +66,18 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-lg-3 col-md-12">
-                <button type="button" id="btnFilterSubmit" class="btn-filter-action">
-                    <?= getIcon('filter') ?> <span>Filter</span>
+            <div class="col-lg-5 col-md-6">
+                <label for="filterDampak" class="filter-input-label">Kondisi Dampak Air</label>
+                <select id="filterDampak" class="filter-control-select">
+                    <option value="">Semua Dampak Aliran</option>
+                    <option value="mati_total">Air Mati Total (Padam)</option>
+                    <option value="aliran_kecil">Debit Air Mengecil</option>
+                    <option value="bertekanan_rendah">Tekanan Rendah / Keruh</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <button type="button" id="btnResetFilter" class="btn btn-outline-secondary w-100 fw-semibold" style="height: 48px; border-radius: var(--radius-md);" title="Reset Semua Filter" onclick="window.resetFilters()">
+                    <?= getIcon('refresh') ?> <span>Reset</span>
                 </button>
             </div>
         </div>
@@ -95,6 +100,7 @@ require_once __DIR__ . '/includes/header.php';
                      data-title="<?= clean($item['judul']) ?>"
                      data-wilayah="<?= clean($item['wilayah_terdampak']) ?>"
                      data-kecamatan="<?= strtolower(clean($item['nama_kecamatan'])) ?>"
+                     data-dampak="<?= strtolower(clean($item['dampak_aliran'])) ?>"
                      data-status="<?= strtolower(clean($item['status'])) ?>"
                      data-ticket="<?= clean($item['nomor_tiket']) ?>">
                     

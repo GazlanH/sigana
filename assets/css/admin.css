@@ -148,7 +148,24 @@ body {
   margin-bottom: 6px;
 }
 
-/* 5. Buttons */
+/* 5. Buttons - Solid Modern (No Gradients) */
+.btn,
+button,
+[type="button"],
+[type="submit"],
+[type="reset"] {
+  background-image: none !important;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+button:hover,
+button:focus,
+button:active {
+  background-image: none !important;
+}
+
 .btn {
   border-radius: 10px;
   font-weight: 600;
@@ -158,16 +175,78 @@ body {
   align-items: center;
   gap: 6px;
   transition: all 0.15s ease;
+  background-image: none !important;
 }
 
 .btn-primary {
-  background-color: var(--admin-primary);
-  border-color: var(--admin-primary);
+  background-color: var(--admin-primary) !important;
+  border-color: var(--admin-primary) !important;
+  color: #ffffff !important;
+  background-image: none !important;
 }
 
-.btn-primary:hover {
-  background-color: var(--admin-primary-dark);
-  border-color: var(--admin-primary-dark);
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--admin-primary-dark) !important;
+  border-color: var(--admin-primary-dark) !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-secondary {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-danger {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-success {
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-action-touch {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  background-image: none !important;
 }
 
 /* Mobile Drawer */

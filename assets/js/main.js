@@ -8,9 +8,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
     const filterKecamatan = document.getElementById('filterKecamatan');
-    const btnFilterSubmit = document.getElementById('btnFilterSubmit');
+    const filterDampak = document.getElementById('filterDampak');
     const statusPillBtns = document.querySelectorAll('.status-pill-btn');
     const noticeCards = Array.from(document.querySelectorAll('.bulletin-card'));
     const emptyState = document.getElementById('emptyState');
@@ -25,33 +24,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let matchingCards = [...noticeCards];
 
     function applyFilters() {
-        const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
         const selectedKecamatan = (filterKecamatan ? filterKecamatan.value : '').toLowerCase().trim();
+        const selectedDampak = (filterDampak ? filterDampak.value : '').toLowerCase().trim();
 
         matchingCards = noticeCards.filter(card => {
-            const title = (card.getAttribute('data-title') || '').toLowerCase();
-            const wilayah = (card.getAttribute('data-wilayah') || '').toLowerCase();
-            const kecamatan = (card.getAttribute('data-kecamatan') || '').toLowerCase();
             const status = (card.getAttribute('data-status') || '').toLowerCase();
-            const ticket = (card.getAttribute('data-ticket') || '').toLowerCase();
+            const kecamatan = (card.getAttribute('data-kecamatan') || '').toLowerCase();
+            const dampak = (card.getAttribute('data-dampak') || '').toLowerCase();
 
             // 1. Status Filter
-            let matchStatus = true;
-            if (currentStatusTab !== 'semua') {
-                matchStatus = (status === currentStatusTab);
-            }
+            const matchStatus = (currentStatusTab === 'semua') || (status === currentStatusTab);
 
-            // 2. Query Search
-            const matchQuery = !query || 
-                title.includes(query) || 
-                wilayah.includes(query) || 
-                kecamatan.includes(query) || 
-                ticket.includes(query);
+            // 2. Kecamatan Filter
+            const matchKecamatan = !selectedKecamatan || (kecamatan === selectedKecamatan);
 
-            // 3. Kecamatan Filter
-            const matchKecamatan = !selectedKecamatan || kecamatan === selectedKecamatan;
+            // 3. Dampak Aliran Filter
+            const matchDampak = !selectedDampak || (dampak === selectedDampak);
 
-            return matchStatus && matchQuery && matchKecamatan;
+            return matchStatus && matchKecamatan && matchDampak;
         });
 
         currentPage = 1;
@@ -142,16 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listeners
-    if (searchInput) {
-        searchInput.addEventListener('input', applyFilters);
-    }
-
     if (filterKecamatan) {
         filterKecamatan.addEventListener('change', applyFilters);
     }
 
-    if (btnFilterSubmit) {
-        btnFilterSubmit.addEventListener('click', applyFilters);
+    if (filterDampak) {
+        filterDampak.addEventListener('change', applyFilters);
     }
 
     statusPillBtns.forEach(btn => {
@@ -164,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.resetFilters = function() {
-        if (searchInput) searchInput.value = '';
         if (filterKecamatan) filterKecamatan.value = '';
+        if (filterDampak) filterDampak.value = '';
         statusPillBtns.forEach(b => {
             if (b.getAttribute('data-tab') === 'semua') {
                 b.classList.add('active');

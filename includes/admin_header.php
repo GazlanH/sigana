@@ -32,8 +32,8 @@ $flash = getFlash();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     
     <!-- Admin Modern Styles -->
-    <link rel="stylesheet" href="../assets/css/style.css?v=3.0">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=3.0">
+    <link rel="stylesheet" href="../assets/css/style.css?v=3.1">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=3.1">
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 

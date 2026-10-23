@@ -29,7 +29,7 @@ $currentScript = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     
     <!-- Custom Modern Theme -->
-    <link rel="stylesheet" href="assets/css/style.css?v=3.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=3.1">
 </head>
 <body class="bg-corporate d-flex flex-column min-vh-100">
 
@@ -46,18 +46,7 @@ $currentScript = basename($_SERVER['PHP_SELF']);
                     </div>
                 </a>
 
-                <!-- Desktop Center Navigation Links -->
-                <nav class="main-nav-links d-none d-md-flex">
-                    <a href="index.php" class="main-nav-item <?= in_array($currentScript, ['index.php', 'detail.php']) ? 'active' : '' ?>">
-                        Gangguan Layanan
-                    </a>
-                    <a href="index.php#daftarWilayah" class="main-nav-item" onclick="if(document.getElementById('filterKecamatan')){ document.getElementById('filterKecamatan').focus(); return false; }">
-                        Wilayah Pelayanan
-                    </a>
-                    <a href="tel:0262232450" class="main-nav-item">
-                        Call Center
-                    </a>
-                </nav>
+                <!-- Clean Minimal Navbar (Center links removed as requested) -->
 
                 <!-- Right Action Buttons (Hubungi Posko & Login Petugas) -->
                 <div class="d-flex align-items-center gap-3">

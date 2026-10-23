@@ -4,7 +4,12 @@
  * SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
  * PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
  * ============================================================================
- * Action Handler Hapus Pengumuman (Pure Native PHP)
+ * Action Handler Hapus Pengumuman (Secured)
+ * ============================================================================
+ * SECURITY:
+ * - Requires POST method (no GET delete)
+ * - CSRF token validation
+ * - Auth guard with session timeout
  * ============================================================================
  */
 
@@ -13,7 +18,13 @@ require_once __DIR__ . '/../includes/functions.php';
 
 requireAuth();
 
-$id = (int)($_GET['id'] ?? 0);
+// Hanya terima POST request — cegah CSRF via GET
+requirePost('pengumuman.php');
+
+// Validasi CSRF token
+csrfGuard('pengumuman.php');
+
+$id = (int)($_POST['id'] ?? 0);
 
 if ($id <= 0) {
     setFlash('error', 'ID Pengumuman tidak valid.');
@@ -34,7 +45,10 @@ try {
         setFlash('error', 'Data pengumuman tidak ditemukan.');
     }
 } catch (PDOException $e) {
-    setFlash('error', 'Gagal menghapus data pengumuman: ' . $e->getMessage());
+    // Jangan bocorkan detail error ke user
+    setFlash('error', 'Gagal menghapus data pengumuman. Silakan coba lagi.');
+    // Log error secara internal jika diperlukan
+    error_log('SIGANA hapus.php error: ' . $e->getMessage());
 }
 
 header('Location: pengumuman.php');

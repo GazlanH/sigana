@@ -22,63 +22,70 @@ if ($edit_id > 0) {
     $edit_data = $stmt_e->fetch();
 }
 
-// 1. Tambah atau Update Kecamatan
+// 1. Tambah, Update, atau Hapus Kecamatan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $nama_kecamatan = trim($_POST['nama_kecamatan'] ?? '');
-    $cabang_pelayanan = trim($_POST['cabang_pelayanan'] ?? '');
+    // Validasi CSRF Token
+    if (!csrfValidate()) {
+        $errors[] = 'Sesi keamanan tidak valid atau telah kedaluwarsa. Silakan muat ulang halaman.';
+    } else {
+        $action = $_POST['action'] ?? '';
 
-    if (empty($nama_kecamatan)) $errors[] = 'Nama kecamatan wajib diisi.';
-    if (empty($cabang_pelayanan)) $errors[] = 'Nama kantor cabang pelayanan wajib diisi.';
-
-    if (empty($errors)) {
-        if ($action === 'tambah') {
+        if ($action === 'hapus') {
+            $id_del = (int)($_POST['id'] ?? 0);
             try {
-                $stmt = $pdo->prepare("INSERT INTO kecamatan (nama_kecamatan, cabang_pelayanan) VALUES (?, ?)");
-                $stmt->execute([$nama_kecamatan, $cabang_pelayanan]);
-                setFlash('success', "Kecamatan {$nama_kecamatan} berhasil ditambahkan!");
-                header('Location: kecamatan.php');
-                exit;
+                $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM pengumuman WHERE kecamatan_id = ?");
+                $stmt_check->execute([$id_del]);
+                $count = $stmt_check->fetchColumn();
+
+                if ($count > 0) {
+                    setFlash('error', "Kecamatan tidak dapat dihapus karena masih terkait dengan {$count} riwayat pengumuman.");
+                } else {
+                    $stmt = $pdo->prepare("DELETE FROM kecamatan WHERE id = ?");
+                    $stmt->execute([$id_del]);
+                    setFlash('success', "Data kecamatan berhasil dihapus dari sistem.");
+                }
             } catch (PDOException $e) {
-                $errors[] = "Kecamatan '{$nama_kecamatan}' mungkin sudah terdaftar.";
+                error_log("Delete kecamatan error: " . $e->getMessage());
+                setFlash('error', "Gagal menghapus kecamatan. Terjadi kesalahan pada basis data.");
             }
-        } elseif ($action === 'edit') {
-            $id_update = (int)($_POST['id'] ?? 0);
-            if ($id_update > 0) {
+            header('Location: kecamatan.php');
+            exit;
+        }
+
+        $nama_kecamatan = trim($_POST['nama_kecamatan'] ?? '');
+        $cabang_pelayanan = trim($_POST['cabang_pelayanan'] ?? '');
+
+        if (empty($nama_kecamatan)) $errors[] = 'Nama kecamatan wajib diisi.';
+        if (empty($cabang_pelayanan)) $errors[] = 'Nama kantor cabang pelayanan wajib diisi.';
+
+        if (empty($errors)) {
+            if ($action === 'tambah') {
                 try {
-                    $stmt = $pdo->prepare("UPDATE kecamatan SET nama_kecamatan = ?, cabang_pelayanan = ? WHERE id = ?");
-                    $stmt->execute([$nama_kecamatan, $cabang_pelayanan, $id_update]);
-                    setFlash('success', "Data kecamatan {$nama_kecamatan} berhasil diperbarui!");
+                    $stmt = $pdo->prepare("INSERT INTO kecamatan (nama_kecamatan, cabang_pelayanan) VALUES (?, ?)");
+                    $stmt->execute([$nama_kecamatan, $cabang_pelayanan]);
+                    setFlash('success', "Kecamatan {$nama_kecamatan} berhasil ditambahkan!");
                     header('Location: kecamatan.php');
                     exit;
                 } catch (PDOException $e) {
-                    $errors[] = "Gagal memperbarui data kecamatan: " . $e->getMessage();
+                    $errors[] = "Kecamatan '{$nama_kecamatan}' mungkin sudah terdaftar.";
+                }
+            } elseif ($action === 'edit') {
+                $id_update = (int)($_POST['id'] ?? 0);
+                if ($id_update > 0) {
+                    try {
+                        $stmt = $pdo->prepare("UPDATE kecamatan SET nama_kecamatan = ?, cabang_pelayanan = ? WHERE id = ?");
+                        $stmt->execute([$nama_kecamatan, $cabang_pelayanan, $id_update]);
+                        setFlash('success', "Data kecamatan {$nama_kecamatan} berhasil diperbarui!");
+                        header('Location: kecamatan.php');
+                        exit;
+                    } catch (PDOException $e) {
+                        error_log("Update kecamatan error: " . $e->getMessage());
+                        $errors[] = "Gagal memperbarui data kecamatan. Terjadi kesalahan basis data.";
+                    }
                 }
             }
         }
     }
-}
-
-// 2. Hapus Kecamatan
-if (isset($_GET['hapus'])) {
-    $id_del = (int)$_GET['hapus'];
-    try {
-        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM pengumuman WHERE kecamatan_id = ?");
-        $stmt_check->execute([$id_del]);
-        $count = $stmt_check->fetchColumn();
-
-        if ($count > 0) {
-            setFlash('error', "Kecamatan tidak dapat dihapus karena masih terkait dengan {$count} riwayat pengumuman.");
-        } else {
-            $stmt = $pdo->prepare("DELETE FROM kecamatan WHERE id = ?");
-            $stmt->execute([$id_del]);
-            setFlash('success', "Data kecamatan berhasil dihapus dari sistem.");
-        }
-    } catch (PDOException $e) {
-        setFlash('error', "Gagal menghapus kecamatan: " . $e->getMessage());
-    }
-    header('Location: kecamatan.php');
-    exit;
 }
 
 // 3. Ambil Daftar Seluruh Kecamatan Beserta Statistik Pengumuman
@@ -122,6 +129,7 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
             </div>
             <div class="card-body p-3">
                 <form action="kecamatan.php" method="POST">
+                    <?= csrfField() ?>
                     <input type="hidden" name="action" value="<?= $edit_data ? 'edit' : 'tambah' ?>">
                     <?php if ($edit_data): ?>
                         <input type="hidden" name="id" value="<?= $edit_data['id'] ?>">
@@ -187,13 +195,18 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end">
-                                            <div class="d-inline-flex gap-1">
+                                            <div class="d-inline-flex gap-1 align-items-center">
                                                 <a href="kecamatan.php?edit=<?= $item['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
                                                     Edit
                                                 </a>
-                                                <a href="kecamatan.php?hapus=<?= $item['id'] ?>" class="btn btn-outline-danger btn-sm btn-action-touch confirm-delete" data-item="Kecamatan <?= clean($item['nama_kecamatan']) ?>" title="Hapus Data">
-                                                    Hapus
-                                                </a>
+                                                <form action="kecamatan.php" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data kecamatan <?= clean($item['nama_kecamatan']) ?>?')">
+                                                    <?= csrfField() ?>
+                                                    <input type="hidden" name="action" value="hapus">
+                                                    <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch" title="Hapus Data">
+                                                        Hapus
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

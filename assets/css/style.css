@@ -13,7 +13,7 @@
   --primary-blue-light: #f0f9ff;
   --primary-blue-border: #e0f2fe;
   --primary-cyan: #0ea5e9;
-  --primary-gradient: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+  --primary-gradient: #0284c7; /* Flat solid color, no gradient */
   --hero-gradient: linear-gradient(180deg, #0077b6 0%, #0096c7 60%, #0284c7 100%);
   
   /* Accent & Action */
@@ -121,42 +121,6 @@ body.bg-corporate {
   letter-spacing: 0.02em;
 }
 
-/* Middle Nav Items */
-.main-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.main-nav-item {
-  color: #475569;
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 8px 4px;
-  position: relative;
-  transition: color 0.15s ease;
-}
-
-.main-nav-item:hover {
-  color: var(--primary-blue);
-}
-
-.main-nav-item.active {
-  color: var(--primary-blue);
-  font-weight: 700;
-}
-
-.main-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -16px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background-color: var(--primary-blue);
-  border-radius: 3px 3px 0 0;
-}
 
 /* Header Right Buttons */
 .btn-hubungi-kami {
@@ -297,11 +261,12 @@ body.bg-corporate {
 
 .btn-filter-action {
   height: 48px;
-  background: var(--primary-gradient);
+  background-color: var(--primary-blue);
+  background-image: none !important;
   color: #ffffff !important;
   font-weight: 700;
   font-size: 0.92rem;
-  border: none;
+  border: 1px solid var(--primary-blue);
   border-radius: var(--radius-md);
   padding: 0 24px;
   display: inline-flex;
@@ -314,8 +279,10 @@ body.bg-corporate {
 }
 
 .btn-filter-action:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+  background-color: var(--primary-blue-dark);
+  background-image: none !important;
+  border-color: var(--primary-blue-dark);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
   transform: translateY(-1px);
 }
 
@@ -593,7 +560,8 @@ body.bg-corporate {
 }
 
 .btn-cta-action {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  background-color: var(--accent-orange);
+  background-image: none !important;
   color: #ffffff !important;
   font-weight: 700;
   font-size: 0.92rem;
@@ -603,14 +571,17 @@ body.bg-corporate {
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
   transition: all 0.2s ease;
 }
 
 .btn-cta-action:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  background-color: #ea580c;
+  background-image: none !important;
+  border-color: transparent;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.4);
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.35);
 }
 
 /* ==========================================================================
@@ -736,4 +707,125 @@ body.bg-corporate {
 
 .detail-box-body {
   font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   9. GLOBAL BUTTONS (100% FLAT & SOLID - NO GRADIENTS)
+   Ensures every clickable button/element has clean solid background colors
+   ========================================================================== */
+.btn,
+button,
+[type="button"],
+[type="submit"],
+[type="reset"],
+.btn-filter-action,
+.btn-cta-action,
+.btn-hubungi-kami,
+.btn-user-avatar,
+.status-pill-btn,
+.pam-page-btn {
+  background-image: none !important;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+button:hover,
+button:focus,
+button:active,
+[type="button"]:hover,
+[type="submit"]:hover,
+[type="reset"]:hover,
+.btn-filter-action:hover,
+.btn-cta-action:hover,
+.btn-hubungi-kami:hover,
+.btn-user-avatar:hover,
+.status-pill-btn:hover,
+.pam-page-btn:hover {
+  background-image: none !important;
+}
+
+/* Primary Button Solid */
+.btn-primary {
+  background-color: var(--primary-blue) !important;
+  border-color: var(--primary-blue) !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--primary-blue-dark) !important;
+  border-color: var(--primary-blue-dark) !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Danger Button Solid */
+.btn-danger {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Secondary Button Solid */
+.btn-secondary {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Success Button Solid */
+.btn-success {
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Warning Button Solid */
+.btn-warning {
+  background-color: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+  background-image: none !important;
 }

@@ -148,9 +148,13 @@ $recent_list = $stmt_recent->fetchAll();
                                         <a href="edit.php?id=<?= $item['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
                                             Edit
                                         </a>
-                                        <a href="hapus.php?id=<?= $item['id'] ?>" class="btn btn-outline-danger btn-sm btn-action-touch confirm-delete" data-item="pengumuman #<?= clean($item['nomor_tiket']) ?>" title="Hapus Data">
-                                            Hapus
-                                        </a>
+                                        <form action="hapus.php" method="POST" class="d-inline" onsubmit="return confirm('⚠️ Konfirmasi Penghapusan:\n\nApakah Anda yakin ingin menghapus pengumuman #<?= clean($item['nomor_tiket']) ?>?\nTindakan ini bersifat permanen dan tidak dapat dibatalkan.')">
+                                            <?= csrfField() ?>
+                                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch" title="Hapus Data">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

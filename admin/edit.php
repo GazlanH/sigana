@@ -34,6 +34,10 @@ $list_kecamatan = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamatan A
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validasi CSRF token
+    if (!csrfValidate()) {
+        $errors[] = 'Sesi keamanan tidak valid atau telah kedaluwarsa. Silakan coba lagi.';
+    } else {
     $judul = trim($_POST['judul'] ?? '');
     $kecamatan_id = (int)($_POST['kecamatan_id'] ?? 0);
     $wilayah_terdampak = trim($_POST['wilayah_terdampak'] ?? '');
@@ -52,6 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($penyebab)) $errors[] = 'Penyebab teknis gangguan wajib diisi.';
     if (empty($tindakan)) $errors[] = 'Langkah tindakan perbaikan wajib diisi.';
     if (empty($waktu_mulai)) $errors[] = 'Waktu mulai kejadian gangguan wajib ditentukan.';
+
+    // Validasi whitelist untuk enum fields
+    $allowedDampak = ['mati_total', 'aliran_kecil', 'bertekanan_rendah'];
+    $allowedStatus = ['investigasi', 'perbaikan', 'normalisasi', 'selesai'];
+    if (!in_array($dampak_aliran, $allowedDampak)) $dampak_aliran = 'mati_total';
+    if (!in_array($status, $allowedStatus)) $status = 'perbaikan';
 
     if (empty($errors)) {
         try {
@@ -95,9 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: pengumuman.php');
             exit;
         } catch (PDOException $e) {
-            $errors[] = "Gagal memperbarui data: " . $e->getMessage();
+            $errors[] = "Gagal memperbarui data. Silakan coba lagi.";
+            error_log('SIGANA edit.php error: ' . $e->getMessage());
         }
     }
+    } // end csrfValidate
 }
 ?>
 
@@ -130,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="card shadow-sm border mb-4">
     <div class="card-body p-3 p-md-4">
         <form action="edit.php?id=<?= $id ?>" method="POST">
+            <?= csrfField() ?>
             <div class="row g-3">
                 <!-- Nomor Tiket (Read Only) -->
                 <div class="col-12 col-md-6">

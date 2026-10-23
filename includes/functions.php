@@ -8,12 +8,16 @@
  * ============================================================================
  */
 
-// 1. Inisialisasi Session Global
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// 1. Muat Modul Keamanan Terpusat
+require_once __DIR__ . '/security.php';
 
-// 2. Hubungkan ke Database
+// 2. Inisialisasi Session dengan Konfigurasi Keamanan Optimal
+initSecureSession();
+
+// 3. Kirim HTTP Security Headers
+sendSecurityHeaders();
+
+// 4. Hubungkan ke Database
 require_once __DIR__ . '/../config/database.php';
 
 /**
@@ -65,6 +69,8 @@ function getIcon($name, $class = '') {
             return '<svg class="svg-icon' . $classAttr . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
         case 'filter':
             return '<svg class="svg-icon' . $classAttr . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>';
+        case 'refresh':
+            return '<svg class="svg-icon' . $classAttr . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>';
         case 'chevron-down':
             return '<svg class="svg-icon' . $classAttr . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
         default:
@@ -179,6 +185,13 @@ function isLoggedIn() {
 function requireAuth() {
     if (!isLoggedIn()) {
         setFlash('error', 'Silakan login terlebih dahulu untuk mengakses panel admin.');
+        header('Location: login.php');
+        exit;
+    }
+
+    // Cek session timeout (2 jam inaktif = auto-logout)
+    if (!checkSessionTimeout(120)) {
+        setFlash('error', 'Sesi Anda telah kedaluwarsa karena tidak ada aktivitas. Silakan login kembali.');
         header('Location: login.php');
         exit;
     }

@@ -28,12 +28,20 @@ if (!$userData) {
 
 // 1. Update Profil (Nama & Jabatan)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
+    // Validasi CSRF token
+    if (!csrfValidate()) {
+        $errors[] = 'Sesi keamanan tidak valid atau telah kedaluwarsa. Silakan coba lagi.';
+    } else {
     $nama_lengkap = trim($_POST['nama_lengkap'] ?? '');
     $jabatan = trim($_POST['jabatan'] ?? '');
     $username = trim($_POST['username'] ?? '');
 
     if (empty($nama_lengkap)) $errors[] = 'Nama lengkap wajib diisi.';
     if (empty($username)) $errors[] = 'Username wajib diisi.';
+    // Validasi format username — hanya alfanumerik, underscore, titik
+    if (!empty($username) && !preg_match('/^[a-zA-Z0-9_.]{3,50}$/', $username)) {
+        $errors[] = 'Username hanya boleh berisi huruf, angka, underscore, dan titik (3-50 karakter).';
+    }
 
     // Cek username unik jika diubah
     if (!empty($username) && $username !== $userData['username']) {
@@ -60,25 +68,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             header('Location: profil.php');
             exit;
         } catch (PDOException $e) {
-            $errors[] = 'Gagal memperbarui profil: ' . $e->getMessage();
+            $errors[] = 'Gagal memperbarui profil. Silakan coba lagi.';
+            error_log('SIGANA profil.php profile error: ' . $e->getMessage());
         }
     }
+    } // end csrfValidate
 }
 
 // 2. Ganti Kata Sandi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'change_password') {
-    $pass_lama = trim($_POST['pass_lama'] ?? '');
-    $pass_baru = trim($_POST['pass_baru'] ?? '');
-    $pass_konfirmasi = trim($_POST['pass_konfirmasi'] ?? '');
+    // Validasi CSRF token
+    if (!csrfValidate()) {
+        $errors[] = 'Sesi keamanan tidak valid atau telah kedaluwarsa. Silakan coba lagi.';
+    } else {
+    $pass_lama = $_POST['pass_lama'] ?? ''; // Jangan trim password
+    $pass_baru = $_POST['pass_baru'] ?? '';
+    $pass_konfirmasi = $_POST['pass_konfirmasi'] ?? '';
 
     if (empty($pass_lama)) $errors[] = 'Password saat ini wajib diisi.';
     if (empty($pass_baru)) $errors[] = 'Password baru wajib diisi.';
-    if (strlen($pass_baru) < 6) $errors[] = 'Password baru minimal 6 karakter.';
+    if (strlen($pass_baru) < 8) $errors[] = 'Password baru minimal 8 karakter.';
     if ($pass_baru !== $pass_konfirmasi) $errors[] = 'Konfirmasi password baru tidak cocok.';
 
-    // Cek password lama
+    // Cek password lama — HANYA via bcrypt verify
     if (empty($errors)) {
-        if (!password_verify($pass_lama, $userData['password']) && $pass_lama !== $userData['password']) {
+        if (!password_verify($pass_lama, $userData['password'])) {
             $errors[] = 'Password saat ini yang Anda masukkan salah.';
         } else {
             try {
@@ -90,10 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 header('Location: profil.php');
                 exit;
             } catch (PDOException $e) {
-                $errors[] = 'Gagal mengubah password: ' . $e->getMessage();
+                $errors[] = 'Gagal mengubah password. Silakan coba lagi.';
+                error_log('SIGANA profil.php password error: ' . $e->getMessage());
             }
         }
     }
+    } // end csrfValidate
 }
 ?>
 
@@ -124,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <div class="card-body p-3 p-md-4">
                 <form action="profil.php" method="POST">
                     <input type="hidden" name="action" value="update_profile">
-
+                    <?= csrfField() ?>
                     <div class="mb-3">
                         <label class="form-label" for="username">Username Login <span class="req">*</span></label>
                         <input type="text" id="username" name="username" class="form-control" value="<?= clean($userData['username']) ?>" required>
@@ -164,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <div class="card-body p-3 p-md-4">
                 <form action="profil.php" method="POST">
                     <input type="hidden" name="action" value="change_password">
-
+                    <?= csrfField() ?>
                     <div class="mb-3">
                         <label class="form-label" for="pass_lama">Kata Sandi Saat Ini <span class="req">*</span></label>
                         <input type="password" id="pass_lama" name="pass_lama" class="form-control" placeholder="Masukkan password lama" required>
@@ -172,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                     <div class="mb-3">
                         <label class="form-label" for="pass_baru">Kata Sandi Baru <span class="req">*</span></label>
-                        <input type="password" id="pass_baru" name="pass_baru" class="form-control" placeholder="Minimal 6 karakter" required>
+                        <input type="password" id="pass_baru" name="pass_baru" class="form-control" placeholder="Minimal 8 karakter" required minlength="8">
                     </div>
 
                     <div class="mb-3">

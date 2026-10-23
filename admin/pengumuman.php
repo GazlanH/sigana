@@ -170,9 +170,13 @@ $kecamatan_options = $pdo->query("SELECT * FROM kecamatan ORDER BY nama_kecamata
                                         <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Rincian Data">
                                             Edit
                                         </a>
-                                        <a href="hapus.php?id=<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm btn-action-touch confirm-delete" data-item="pengumuman #<?= clean($row['nomor_tiket']) ?>" title="Hapus Pengumuman">
-                                            Hapus
-                                        </a>
+                                        <form action="hapus.php" method="POST" class="d-inline" onsubmit="return confirm('⚠️ Konfirmasi Penghapusan:\n\nApakah Anda yakin ingin menghapus pengumuman #<?= clean($row['nomor_tiket']) ?>?\nTindakan ini bersifat permanen dan tidak dapat dibatalkan.')">
+                                            <?= csrfField() ?>
+                                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch" title="Hapus Pengumuman">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

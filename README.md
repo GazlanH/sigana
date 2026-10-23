@@ -1,116 +1,61 @@
-# 💧 SIGANA (Sistem Informasi Gangguan Aliran Air)
-### Perumda Air Minum Tirta Intan Kabupaten Garut
+# sigana
 
-**SIGANA** adalah aplikasi web resmi untuk publikasi, pemantauan, dan pengelolaan informasi gangguan pasokan serta pemeliharaan jaringan pipa transmisi/distribusi air bersih pelanggan di wilayah Kabupaten Garut.
+## demo aplikasi
 
-Dibuat menggunakan **Pure Native PHP & MySQL (Zero Framework Dependency)** sehingga sangat ringan, cepat, mudah dijalankan langsung di Laragon/XAMPP, dan sangat mudah dipelihara atau di-troubleshoot.
-
----
-
-## 🚀 Fitur Utama
-
-### 🌐 Sisi Pengguna Publik
-1. **Papan Pengumuman Interaktif**: Menampilkan daftar pengumuman gangguan air yang terstruktur dengan badge status (`Investigasi`, `Dalam Perbaikan`, `Normalisasi`, `Selesai`).
-2. **Pencarian & Filter Cepat (Real-Time)**: Cari berdasarkan nama jalan, perumahan, nomor tiket, atau filter berdasarkan kecamatan dan status penanganan tanpa perlu reload halaman.
-3. **Statistik Gangguan Terkini**: Ringkasan jumlah pekerjaan perbaikan, normalisasi, dan selesai.
-4. **Halaman Rincian Tiket (`detail.php`)**: Menampilkan penyebab, langkah teknis lapangan, estimasi normalisasi, serta nomor armada tangki air darurat.
-5. **Bagikan ke WhatsApp (`Share to WA`)**: Format pesan otomatis yang rapi dan memuat ringkasan gangguan beserta tautan resmi.
-6. **Cetak Lembar Pengumuman**: Tampilan print-friendly untuk dicetak dan ditempel di papan pengumuman fisik kantor cabang / desa.
-
-### 🔐 Sisi Panel Admin & Petugas
-1. **Dashboard Operasional**: Metrik data gangguan, quick actions, dan tabel pengumuman terbaru.
-2. **Manajemen Pengumuman (CRUD)**:
-   - Tambah pengumuman dengan generator nomor tiket otomatis (`GNG-YYYYMM-XXX`).
-   - Edit rincian gangguan dan pembaruan status real-time.
-   - Hapus data dengan konfirmasi keamanan.
-3. **Master Wilayah Kecamatan**:
-   - Tambah & edit daftar kecamatan serta kantor cabang pelayanan.
-   - Statistik aktif gangguan per kecamatan.
-   - Proteksi hapus jika kecamatan masih memiliki riwayat pengumuman.
-4. **Pengaturan Akun Petugas (`profil.php`)**: Ubah identitas petugas dan pembaruan kata sandi aman (Enkripsi Bcrypt).
-5. **Autentikasi & Session Guard**: Pengamanan halaman admin dengan proteksi session native.
+<!-- kamu bisa simpan file gif di folder assets/img/ atau ganti path di bawah ini -->
+![demo aplikasi](assets/img/demo.gif)
 
 ---
 
-## 📁 Struktur Direktori Proyek
+## tentang aplikasi
 
-```text
-sigana/
-│
-├── admin/                     # Modul Panel Admin & Petugas
-│   ├── index.php              # Dashboard Operasional Admin
-│   ├── login.php              # Halaman Login Petugas
-│   ├── logout.php             # Handler Logout Petugas
-│   ├── pengumuman.php         # Kelola Seluruh Data Pengumuman
-│   ├── tambah.php             # Form Input Pengumuman Baru
-│   ├── edit.php               # Form Edit & Update Status
-│   ├── hapus.php              # Action Hapus Pengumuman
-│   ├── kecamatan.php          # Kelola Master Kecamatan
-│   └── profil.php             # Kelola Profil Petugas & Ganti Password
-│
-├── assets/                    # Aset Statis (CSS, JS, Gambar)
-│   ├── css/
-│   │   ├── style.css          # Styling Utama & Kartu Pengumuman
-│   │   └── admin.css          # Styling Panel Admin
-│   ├── js/
-│   │   ├── main.js            # Logika Pencarian, Filter & WhatsApp Share
-│   │   └── admin.js           # Konfirmasi Hapus & Flash Alert Dismiss
-│   └── img/
-│       └── logo.png           # Logo Resmi Perumda Tirta Intan Garut
-│
-├── config/
-│   └── database.php           # Koneksi PDO & Auto-Migration Database
-│
-├── includes/                  # Komponen Reusable Header/Footer/Helper
-│   ├── functions.php          # Fungsi Helper, Format Tanggal, SVG Icons, Flash Msg
-│   ├── header.php             # Header Publik
-│   ├── footer.php             # Footer Publik
-│   ├── admin_header.php       # Topbar & Sidebar Admin
-│   └── admin_footer.php       # Footer Admin
-│
-├── .env                       # File Konfigurasi Environment (Opsional)
-├── database.sql               # Skema Tabel MySQL & Data Seeder Awal
-├── detail.php                 # Halaman Rincian Pengumuman Publik
-├── index.php                  # Halaman Papan Pengumuman Publik
-└── README.md                  # Dokumentasi Proyek
-```
+sigana (sistem informasi gangguan aliran air) adalah aplikasi web untuk mempublikasikan dan memantau informasi gangguan aliran air bersih serta perbaikan pipa jaringan pelanggan di wilayah perumda air minum tirta intan kabupaten garut.
 
 ---
 
-## 🛠️ Panduan Instalasi & Menjalankan di Laragon
+## fungsi utama aplikasi
 
-1. **Letakkan Folder Proyek**:
-   Pastikan folder proyek berada di `C:\laragon\www\sigana`
+### untuk masyarakat umum
+- melihat pengumuman gangguan aliran air secara langsung beserta status penanganannya (investigasi, dalam perbaikan, normalisasi, dan selesai).
+- memfilter daftar pengumuman berdasarkan kecamatan dan dampak aliran air tanpa reload halaman.
+- melihat detail pengumuman seperti penyebab gangguan, tindakan teknis petugas, estimasi air normal, dan kontak armada tangki air darurat.
+- membagikan info gangguan langsung ke WhatsApp dengan format teks yang sudah rapi dan menyertakan tautan resmi.
+- mencetak pengumuman ke lembar kertas fisik untuk kebutuhan papan informasi kantor atau warga.
 
-2. **Jalankan Service**:
-   Buka Laragon, klik tombol **Start All** (Apache & MySQL).
-
-3. **Buka Melalui Browser**:
-   - **Halaman Publik**: [http://localhost/sigana/](http://localhost/sigana/) atau [http://sigana.test/](http://sigana.test/)
-   - **Panel Admin**: [http://localhost/sigana/admin/login.php](http://localhost/sigana/admin/login.php)
-
-> **Catatan Auto-Setup**:
-> Sistem secara otomatis akan membuat database `db_sigana` dan mengeksekusi tabel serta seeder awal dari `database.sql` pada saat pertama kali halaman web dibuka.
-
----
-
-## 🔑 Akun Default Petugas Admin
-
-| Keterangan | Nilai |
-| :--- | :--- |
-| **Username** | `admin` |
-| **Password** | `admin123` |
-| **Akses** | Administrator / Petugas Humas & Teknis |
+### untuk petugas dan admin
+- melihat ringkasan data dan statistik pekerjaan gangguan lewat dashboard operasional.
+- membuat pengumuman gangguan baru dengan nomor tiket yang dibuat otomatis.
+- mengubah status penanganan dan memperbarui perkembangan perbaikan di lapangan.
+- mengelola master data wilayah kecamatan yang terhubung ke jaringan pelayanan.
+- mengelola akun petugas dan mengganti kata sandi secara aman.
 
 ---
 
-## 🔧 Panduan Troubleshooting
+## teknologi yang dipakai
 
-| Gejala Masalah | Penyebab Umum | Solusi Cepat |
-| :--- | :--- | :--- |
-| **Koneksi Database Gagal** | Service MySQL belum berjalan atau port 3306 bentrok. | Buka Laragon / XAMPP, pastikan tombol MySQL berwarna hijau (*Running*). Periksa kredensial di file `.env`. |
-| **Halaman tidak mau login** | Session PHP terblokir di browser. | Pastikan cookie diizinkan di browser, atau coba buka via *Incognito Window*. |
-| **Gambar logo tidak muncul** | Path file berbeda. | Pastikan file `assets/img/logo.png` tersedia di folder proyek. |
+- **PHP**
+  dipakai sebagai bahasa backend utama untuk mengurus logika aplikasi, rute halaman, pengolahan form, sistem sesi login petugas, dan menampilkan data ke halaman web.
 
----
-*Dikembangkan untuk Perumda Air Minum Tirta Intan Kabupaten Garut.*
+- **MySQL**
+  dipakai sebagai database untuk menyimpan seluruh data pengumuman gangguan, data kecamatan, dan akun pengguna secara terstruktur.
+
+- **PDO (PHP Data Objects)**
+  dipakai sebagai penghubung antara PHP dan MySQL dengan prepared statements agar aman dari celah SQL injection, sekaligus menjalankan proses migrasi tabel database secara otomatis.
+
+- **HTML5**
+  dipakai untuk menyusun struktur dasar halaman web baik pada bagian publik maupun panel admin.
+
+- **CSS3**
+  dipakai untuk mengatur tampilan antarmuka, tata letak, warna tema, kartu pengumuman, dan format tampilan khusus saat dicetak.
+
+- **Bootstrap 5**
+  dipakai sebagai framework CSS pendukung untuk mempermudah pengaturan grid responsif di berbagai ukuran layar, komponen formulir, tombol, notifikasi alert, dan menu mobile drawer.
+
+- **JavaScript (Vanilla JS)**
+  dipakai di sisi browser untuk menjalankan fitur pencarian dan filter kartu pengumuman secara real-time, sistem pagination halaman, dan konfirmasi saat menghapus data.
+
+- **Google Fonts**
+  dipakai untuk memuat font Plus Jakarta Sans agar teks informasi mudah dan nyaman dibaca.
+
+- **SVG**
+  dipakai untuk menampilkan ikon antarmuka secara inline sehingga tampilan tetap tajam dan beban muat halaman tetap ringan tanpa library icon font tambahan.

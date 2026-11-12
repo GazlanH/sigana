@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function scrollToGrid() {
         const grid = document.getElementById('announcementGrid');
         if (grid) {
-            const topPos = grid.getBoundingClientRect().top + window.pageYOffset - 100;
+            const topPos = grid.getBoundingClientRect().top + window.scrollY - 100;
             window.scrollTo({ top: topPos, behavior: 'smooth' });
         }
     }

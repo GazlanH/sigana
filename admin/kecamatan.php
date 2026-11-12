@@ -12,7 +12,7 @@ $pageTitle = "Master Wilayah Kecamatan";
 require_once __DIR__ . '/../includes/admin_header.php';
 
 $errors = [];
-$edit_id = (int)($_GET['edit'] ?? 0);
+$edit_id = (int) ($_GET['edit'] ?? 0);
 $edit_data = null;
 
 // Jika mode edit, ambil data kecamatan yang akan diedit
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'] ?? '';
 
         if ($action === 'hapus') {
-            $id_del = (int)($_POST['id'] ?? 0);
+            $id_del = (int) ($_POST['id'] ?? 0);
             try {
                 $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM pengumuman WHERE kecamatan_id = ?");
                 $stmt_check->execute([$id_del]);
@@ -55,8 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nama_kecamatan = trim($_POST['nama_kecamatan'] ?? '');
         $cabang_pelayanan = trim($_POST['cabang_pelayanan'] ?? '');
 
-        if (empty($nama_kecamatan)) $errors[] = 'Nama kecamatan wajib diisi.';
-        if (empty($cabang_pelayanan)) $errors[] = 'Nama kantor cabang pelayanan wajib diisi.';
+        if (empty($nama_kecamatan))
+            $errors[] = 'Nama kecamatan wajib diisi.';
+        if (empty($cabang_pelayanan))
+            $errors[] = 'Nama kantor cabang pelayanan wajib diisi.';
 
         if (empty($errors)) {
             if ($action === 'tambah') {
@@ -70,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $errors[] = "Kecamatan '{$nama_kecamatan}' mungkin sudah terdaftar.";
                 }
             } elseif ($action === 'edit') {
-                $id_update = (int)($_POST['id'] ?? 0);
+                $id_update = (int) ($_POST['id'] ?? 0);
                 if ($id_update > 0) {
                     try {
                         $stmt = $pdo->prepare("UPDATE kecamatan SET nama_kecamatan = ?, cabang_pelayanan = ? WHERE id = ?");
@@ -104,7 +106,8 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
     <div>
         <h2 class="h4 fw-bold text-dark mb-1">Kelola Wilayah & Cabang Pelayanan</h2>
-        <p class="text-muted small mb-0">Daftar kecamatan dan kantor cabang operasional Perumda Air Minum Tirta Intan Garut.</p>
+        <p class="text-muted small mb-0">Daftar kecamatan dan kantor cabang operasional Perumda Air Minum Tirta Intan
+            Garut.</p>
     </div>
 </div>
 
@@ -137,20 +140,27 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
 
                     <div class="mb-3">
                         <label class="form-label" for="nama_kecamatan">Nama Kecamatan <span class="req">*</span></label>
-                        <input type="text" id="nama_kecamatan" name="nama_kecamatan" class="form-control" placeholder="Contoh: Cisurupan" value="<?= $edit_data ? clean($edit_data['nama_kecamatan']) : '' ?>" required>
+                        <input type="text" id="nama_kecamatan" name="nama_kecamatan" class="form-control"
+                            placeholder="Contoh: Cisurupan"
+                            value="<?= $edit_data ? clean($edit_data['nama_kecamatan']) : (isset($_POST['nama_kecamatan']) && !$edit_data ? clean($_POST['nama_kecamatan']) : '') ?>" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="cabang_pelayanan">Kantor Cabang Pelayanan <span class="req">*</span></label>
-                        <input type="text" id="cabang_pelayanan" name="cabang_pelayanan" class="form-control" placeholder="Contoh: Cabang Bayongbong" value="<?= $edit_data ? clean($edit_data['cabang_pelayanan']) : '' ?>" required>
+                        <label class="form-label" for="cabang_pelayanan">Kantor Cabang Pelayanan <span
+                                class="req">*</span></label>
+                        <input type="text" id="cabang_pelayanan" name="cabang_pelayanan" class="form-control"
+                            placeholder="Contoh: Cabang Bayongbong"
+                            value="<?= $edit_data ? clean($edit_data['cabang_pelayanan']) : (isset($_POST['cabang_pelayanan']) && !$edit_data ? clean($_POST['cabang_pelayanan']) : '') ?>" required>
                     </div>
 
                     <div class="d-flex gap-2">
                         <?php if ($edit_data): ?>
                             <a href="kecamatan.php" class="btn btn-secondary flex-fill">Batal</a>
                         <?php endif; ?>
-                        <button type="submit" class="btn btn-primary fw-semibold flex-fill d-inline-flex align-items-center justify-content-center gap-1">
-                            <?= getIcon('check') ?> <span><?= $edit_data ? 'Simpan Perubahan' : 'Simpan Kecamatan' ?></span>
+                        <button type="submit"
+                            class="btn btn-primary fw-semibold flex-fill d-inline-flex align-items-center justify-content-center gap-1">
+                            <?= getIcon('check') ?>
+                            <span><?= $edit_data ? 'Simpan Perubahan' : 'Simpan Kecamatan' ?></span>
                         </button>
                     </div>
                 </form>
@@ -189,21 +199,28 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
                                         <td class="text-muted small"><?= clean($item['cabang_pelayanan']) ?></td>
                                         <td>
                                             <?php if ($item['gangguan_aktif'] > 0): ?>
-                                                <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle"><?= (int)$item['gangguan_aktif'] ?> Aktif</span>
+                                                <span
+                                                    class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle"><?= (int) $item['gangguan_aktif'] ?>
+                                                    Aktif</span>
                                             <?php else: ?>
-                                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Aman (0)</span>
+                                                <span
+                                                    class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Aman
+                                                    (0)</span>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end">
                                             <div class="d-inline-flex gap-1 align-items-center">
-                                                <a href="kecamatan.php?edit=<?= $item['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
+                                                <a href="kecamatan.php?edit=<?= $item['id'] ?>"
+                                                    class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
                                                     Edit
                                                 </a>
-                                                <form action="kecamatan.php" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data kecamatan <?= clean($item['nama_kecamatan']) ?>?')">
+                                                <form action="kecamatan.php" method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Yakin ingin menghapus data kecamatan ' + <?= json_encode(clean($item['nama_kecamatan'])) ?> + '?')">
                                                     <?= csrfField() ?>
                                                     <input type="hidden" name="action" value="hapus">
                                                     <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch" title="Hapus Data">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch"
+                                                        title="Hapus Data">
                                                         Hapus
                                                     </button>
                                                 </form>

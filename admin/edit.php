@@ -155,7 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form-label" for="kecamatan_id">Wilayah Kecamatan Pelayanan <span class="req">*</span></label>
                     <select id="kecamatan_id" name="kecamatan_id" class="form-select" required>
                         <?php foreach ($list_kecamatan as $kec): ?>
-                            <option value="<?= $kec['id'] ?>" <?= ((int)$data['kecamatan_id'] === (int)$kec['id']) ? 'selected' : '' ?>>
+                            <?php
+                                // Pertahankan pilihan POST jika ada (setelah validasi gagal), lalu fallback ke data DB
+                                $selectedKecId = isset($_POST['kecamatan_id']) ? (int)$_POST['kecamatan_id'] : (int)$data['kecamatan_id'];
+                            ?>
+                            <option value="<?= $kec['id'] ?>" <?= ($selectedKecId === (int)$kec['id']) ? 'selected' : '' ?>>
                                 Kecamatan <?= clean($kec['nama_kecamatan']) ?> (<?= clean($kec['cabang_pelayanan']) ?>)
                             </option>
                         <?php endforeach; ?>

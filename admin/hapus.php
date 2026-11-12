@@ -13,7 +13,6 @@
  * ============================================================================
  */
 
-require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 requireAuth();
@@ -24,7 +23,7 @@ requirePost('pengumuman.php');
 // Validasi CSRF token
 csrfGuard('pengumuman.php');
 
-$id = (int)($_POST['id'] ?? 0);
+$id = (int) ($_POST['id'] ?? 0);
 
 if ($id <= 0) {
     setFlash('error', 'ID Pengumuman tidak valid.');

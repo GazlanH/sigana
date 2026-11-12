@@ -63,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
+            // Guard: pastikan $user tersedia
+            $createdBy = isset($user['id']) ? (int)$user['id'] : null;
+
             $insert_sql = "
                 INSERT INTO pengumuman (
                     nomor_tiket, judul, kecamatan_id, wilayah_terdampak, 
@@ -87,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $waktu_mulai,
                 !empty($estimasi_selesai) ? $estimasi_selesai : null,
                 $kontak_posko,
-                $user['id']
+                $createdBy
             ]);
 
             setFlash('success', "Pengumuman tiket #{$nomor_tiket} berhasil dipublikasikan ke publik!");

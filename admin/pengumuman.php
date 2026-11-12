@@ -16,6 +16,12 @@ $status_filter = trim($_GET['status'] ?? '');
 $kecamatan_filter = (int)($_GET['kecamatan_id'] ?? 0);
 $q = trim($_GET['q'] ?? '');
 
+// Whitelist validasi status filter
+$allowed_statuses = ['investigasi', 'perbaikan', 'normalisasi', 'selesai'];
+if (!in_array($status_filter, $allowed_statuses)) {
+    $status_filter = '';
+}
+
 // 2. Query Dinamis
 $sql = "
     SELECT p.*, k.nama_kecamatan, k.cabang_pelayanan, u.nama_lengkap as nama_petugas

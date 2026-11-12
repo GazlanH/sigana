@@ -200,14 +200,11 @@ if ($currentIndex === false) $currentIndex = 1;
 
         <!-- Action / Sharing Buttons -->
         <div class="d-flex gap-2 flex-wrap pt-3 border-top justify-content-between align-items-center">
-            <div class="d-flex gap-2 flex-wrap">
-                <a href="https://wa.me/?text=<?= urlencode("📢 *INFORMASI GANGGUAN AIR BERSIH PERUMDA TIRTA INTAN GARUT*\n\nTiket: #" . $detail['nomor_tiket'] . "\nPerihal: " . $detail['judul'] . "\nWilayah: " . $detail['nama_kecamatan'] . " - " . $detail['wilayah_terdampak'] . "\nStatus: " . ucfirst($detail['status']) . "\n\nInformasi lengkap: " . "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) ?>"
+            <div>
+                <a href="https://wa.me/?text=<?= urlencode("📢 *INFORMASI GANGGUAN AIR BERSIH PERUMDA TIRTA INTAN GARUT*\n\nTiket: #" . $detail['nomor_tiket'] . "\nPerihal: " . $detail['judul'] . "\nWilayah: " . $detail['nama_kecamatan'] . " - " . $detail['wilayah_terdampak'] . "\nStatus: " . ucfirst($detail['status']) . "\n\nInformasi lengkap: " . getSecureBaseUrl() . "/sigana/detail.php?tiket=" . urlencode($detail['nomor_tiket'])) ?>"
                    target="_blank" class="btn btn-success fw-semibold d-inline-flex align-items-center gap-1">
                     <?= getIcon('whatsapp') ?> <span>Bagikan ke WhatsApp</span>
                 </a>
-                <button type="button" class="btn btn-outline-secondary fw-semibold" onclick="window.print()">
-                    Cetak Lembar Pengumuman
-                </button>
             </div>
             <div class="small text-muted">
                 Petugas: <strong><?= clean($detail['nama_petugas'] ?? 'Petugas Tirta Intan') ?></strong> (<?= clean($detail['jabatan_petugas'] ?? 'Humas & Teknis') ?>)

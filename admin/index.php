@@ -12,12 +12,12 @@ $pageTitle = "Dashboard Operasional";
 require_once __DIR__ . '/../includes/admin_header.php';
 
 // 1. Ambil Statistik
-$total_semua = (int)$pdo->query("SELECT COUNT(*) FROM pengumuman")->fetchColumn();
-$total_perbaikan = (int)$pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'perbaikan'")->fetchColumn();
-$total_investigasi = (int)$pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'investigasi'")->fetchColumn();
-$total_normalisasi = (int)$pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'normalisasi'")->fetchColumn();
-$total_selesai = (int)$pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'selesai'")->fetchColumn();
-$total_kecamatan = (int)$pdo->query("SELECT COUNT(*) FROM kecamatan")->fetchColumn();
+$total_semua = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman")->fetchColumn();
+$total_perbaikan = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'perbaikan'")->fetchColumn();
+$total_investigasi = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'investigasi'")->fetchColumn();
+$total_normalisasi = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'normalisasi'")->fetchColumn();
+$total_selesai = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'selesai'")->fetchColumn();
+$total_kecamatan = (int) $pdo->query("SELECT COUNT(*) FROM kecamatan")->fetchColumn();
 
 // 2. Ambil 5 Pengumuman Terbaru
 $stmt_recent = $pdo->query("
@@ -34,7 +34,8 @@ $recent_list = $stmt_recent->fetchAll();
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <div>
         <h2 class="h4 fw-bold text-dark mb-1">Dashboard Operasional SIGANA</h2>
-        <p class="text-muted small mb-0">Ringkasan status pemeliharaan jaringan pipa dan pengumuman gangguan air di Kabupaten Garut.</p>
+        <p class="text-muted small mb-0">Ringkasan status pemeliharaan jaringan pipa dan pengumuman gangguan air di
+            Kabupaten Garut.</p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
         <a href="tambah.php" class="btn btn-primary fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
@@ -72,7 +73,8 @@ $recent_list = $stmt_recent->fetchAll();
         <div class="card shadow-sm border admin-stat-card c-warning h-100">
             <div class="card-body p-3">
                 <div class="text-muted small text-uppercase fw-bold">Normalisasi / Investigasi</div>
-                <div class="h3 fw-bold text-warning-emphasis mb-0 mt-1"><?= $total_normalisasi + $total_investigasi ?></div>
+                <div class="h3 fw-bold text-warning-emphasis mb-0 mt-1"><?= $total_normalisasi + $total_investigasi ?>
+                </div>
                 <small class="text-muted" style="font-size: 0.72rem;">Pengisian pipa & survei</small>
             </div>
         </div>
@@ -128,11 +130,13 @@ $recent_list = $stmt_recent->fetchAll();
                                 </td>
                                 <td>
                                     <div class="fw-bold text-dark"><?= clean($item['judul']) ?></div>
-                                    <small class="text-muted"><?= clean(mb_strimwidth($item['penyebab'], 0, 55, '...')) ?></small>
+                                    <small
+                                        class="text-muted"><?= clean(mb_strimwidth($item['penyebab'], 0, 55, '...')) ?></small>
                                 </td>
                                 <td>
                                     <div class="fw-semibold text-dark">Kec. <?= clean($item['nama_kecamatan']) ?></div>
-                                    <small class="text-muted"><?= clean(mb_strimwidth($item['wilayah_terdampak'], 0, 40, '...')) ?></small>
+                                    <small
+                                        class="text-muted"><?= clean(mb_strimwidth($item['wilayah_terdampak'], 0, 40, '...')) ?></small>
                                 </td>
                                 <td>
                                     <?= formatTanggalIndo($item['waktu_mulai'], false) ?>
@@ -142,16 +146,21 @@ $recent_list = $stmt_recent->fetchAll();
                                 </td>
                                 <td class="text-end">
                                     <div class="d-inline-flex gap-1">
-                                        <a href="../detail.php?tiket=<?= urlencode($item['nomor_tiket']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm btn-action-touch" title="Lihat Tampilan Publik">
+                                        <a href="../detail.php?tiket=<?= urlencode($item['nomor_tiket']) ?>" target="_blank"
+                                            class="btn btn-outline-secondary btn-sm btn-action-touch"
+                                            title="Lihat Tampilan Publik">
                                             Lihat
                                         </a>
-                                        <a href="edit.php?id=<?= $item['id'] ?>" class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
+                                        <a href="edit.php?id=<?= $item['id'] ?>"
+                                            class="btn btn-outline-primary btn-sm btn-action-touch" title="Edit Data">
                                             Edit
                                         </a>
-                                        <form action="hapus.php" method="POST" class="d-inline" onsubmit="return confirm('⚠️ Konfirmasi Penghapusan:\n\nApakah Anda yakin ingin menghapus pengumuman #<?= clean($item['nomor_tiket']) ?>?\nTindakan ini bersifat permanen dan tidak dapat dibatalkan.')">
+                                        <form action="hapus.php" method="POST" class="d-inline"
+                                            onsubmit="return confirm('⚠️ Konfirmasi Penghapusan:\n\nApakah Anda yakin ingin menghapus pengumuman #<?= clean($item['nomor_tiket']) ?>?\nTindakan ini bersifat permanen dan tidak dapat dibatalkan.')">
                                             <?= csrfField() ?>
                                             <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                            <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch" title="Hapus Data">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm btn-action-touch"
+                                                title="Hapus Data">
                                                 Hapus
                                             </button>
                                         </form>

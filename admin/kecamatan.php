@@ -142,7 +142,8 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
                         <label class="form-label" for="nama_kecamatan">Nama Kecamatan <span class="req">*</span></label>
                         <input type="text" id="nama_kecamatan" name="nama_kecamatan" class="form-control"
                             placeholder="Contoh: Cisurupan"
-                            value="<?= $edit_data ? clean($edit_data['nama_kecamatan']) : (isset($_POST['nama_kecamatan']) && !$edit_data ? clean($_POST['nama_kecamatan']) : '') ?>" required>
+                            value="<?= $edit_data ? clean($edit_data['nama_kecamatan']) : (isset($_POST['nama_kecamatan']) && !$edit_data ? clean($_POST['nama_kecamatan']) : '') ?>"
+                            required>
                     </div>
 
                     <div class="mb-3">
@@ -150,7 +151,8 @@ $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
                                 class="req">*</span></label>
                         <input type="text" id="cabang_pelayanan" name="cabang_pelayanan" class="form-control"
                             placeholder="Contoh: Cabang Bayongbong"
-                            value="<?= $edit_data ? clean($edit_data['cabang_pelayanan']) : (isset($_POST['cabang_pelayanan']) && !$edit_data ? clean($_POST['cabang_pelayanan']) : '') ?>" required>
+                            value="<?= $edit_data ? clean($edit_data['cabang_pelayanan']) : (isset($_POST['cabang_pelayanan']) && !$edit_data ? clean($_POST['cabang_pelayanan']) : '') ?>"
+                            required>
                     </div>
 
                     <div class="d-flex gap-2">

@@ -8,6 +8,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const filterSearch = document.getElementById('filterSearch');
     const filterKecamatan = document.getElementById('filterKecamatan');
     const filterDampak = document.getElementById('filterDampak');
     const statusPillBtns = document.querySelectorAll('.status-pill-btn');
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let matchingCards = [...noticeCards];
 
     function applyFilters() {
+        const queryText = (filterSearch ? filterSearch.value : '').toLowerCase().trim();
         const selectedKecamatan = (filterKecamatan ? filterKecamatan.value : '').toLowerCase().trim();
         const selectedDampak = (filterDampak ? filterDampak.value : '').toLowerCase().trim();
 
@@ -31,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const status = (card.getAttribute('data-status') || '').toLowerCase();
             const kecamatan = (card.getAttribute('data-kecamatan') || '').toLowerCase();
             const dampak = (card.getAttribute('data-dampak') || '').toLowerCase();
+            const title = (card.getAttribute('data-title') || '').toLowerCase();
+            const wilayah = (card.getAttribute('data-wilayah') || '').toLowerCase();
+            const ticket = (card.getAttribute('data-ticket') || '').toLowerCase();
 
             // 1. Status Filter
             const matchStatus = (currentStatusTab === 'semua') || (status === currentStatusTab);
@@ -41,7 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Dampak Aliran Filter
             const matchDampak = !selectedDampak || (dampak === selectedDampak);
 
-            return matchStatus && matchKecamatan && matchDampak;
+            // 4. Pencarian Teks Instan (Judul, Wilayah/Jalan, Nomor Tiket, Kecamatan)
+            const matchSearch = !queryText || 
+                title.includes(queryText) || 
+                wilayah.includes(queryText) || 
+                ticket.includes(queryText) || 
+                kecamatan.includes(queryText);
+
+            return matchStatus && matchKecamatan && matchDampak && matchSearch;
         });
 
         currentPage = 1;
@@ -132,6 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listeners
+    if (filterSearch) {
+        filterSearch.addEventListener('input', applyFilters);
+    }
+
     if (filterKecamatan) {
         filterKecamatan.addEventListener('change', applyFilters);
     }
@@ -150,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.resetFilters = function() {
+        if (filterSearch) filterSearch.value = '';
         if (filterKecamatan) filterKecamatan.value = '';
         if (filterDampak) filterDampak.value = '';
         statusPillBtns.forEach(b => {

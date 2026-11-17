@@ -194,7 +194,41 @@ function buildPaginationUrl($targetPage, $q, $status_filter, $kecamatan_filter) 
                                     <?= renderDampakBadge($row['dampak_aliran']) ?>
                                 </td>
                                 <td>
-                                    <?= renderStatusBadge($row['status']) ?>
+                                    <!-- Quick Status Switcher Dropdown -->
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm p-0 border-0 bg-transparent dropdown-toggle text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Klik untuk ubah status secara cepat">
+                                            <?= renderStatusBadge($row['status']) ?>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border p-1" style="font-size: 0.82rem; min-width: 170px;">
+                                            <li class="dropdown-header text-uppercase fw-bold pb-1" style="font-size: 0.68rem;">Ubah Status:</li>
+                                            <?php 
+                                            $allStatuses = [
+                                                'investigasi' => ['label' => 'Investigasi', 'color' => '#d97706'],
+                                                'perbaikan'   => ['label' => 'Dalam Perbaikan', 'color' => '#dc2626'],
+                                                'normalisasi' => ['label' => 'Normalisasi Aliran', 'color' => '#0284c7'],
+                                                'selesai'     => ['label' => 'Selesai', 'color' => '#16a34a']
+                                            ];
+                                            $currentUrl = 'pengumuman.php?' . http_build_query($_GET);
+                                            foreach ($allStatuses as $stgKey => $stgVal):
+                                                $isCur = ($row['status'] === $stgKey);
+                                            ?>
+                                                <li>
+                                                    <form action="quick_status.php" method="POST" class="m-0 p-0">
+                                                        <?= csrfField() ?>
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <input type="hidden" name="status" value="<?= $stgKey ?>">
+                                                        <input type="hidden" name="redirect" value="<?= clean($currentUrl) ?>">
+                                                        <button type="submit" class="dropdown-item py-1 px-2 rounded d-flex align-items-center justify-content-between <?= $isCur ? 'active fw-bold' : '' ?>" <?= $isCur ? 'disabled' : '' ?>>
+                                                            <span><span class="d-inline-block rounded-circle me-1" style="width: 8px; height: 8px; background: <?= $stgVal['color'] ?>;"></span> <?= $stgVal['label'] ?></span>
+                                                            <?php if ($isCur): ?>
+                                                                <small class="ms-1">✓</small>
+                                                            <?php endif; ?>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="small">

@@ -55,7 +55,13 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Floating Filter & Selection Card -->
     <div class="filter-search-card">
         <div class="row g-3 align-items-end">
-            <div class="col-lg-5 col-md-6">
+            <div class="col-lg-4 col-md-12">
+                <label for="filterSearch" class="filter-input-label">Pencarian Cepat</label>
+                <div class="position-relative">
+                    <input type="text" id="filterSearch" class="filter-control-input" placeholder="Cari jalan, perumahan, wilayah, atau judul..." autocomplete="off">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-5">
                 <label for="filterKecamatan" class="filter-input-label">Wilayah Kecamatan</label>
                 <select id="filterKecamatan" class="filter-control-select">
                     <option value="">Semua Kecamatan di Garut</option>
@@ -66,7 +72,7 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-lg-5 col-md-6">
+            <div class="col-lg-3 col-md-4">
                 <label for="filterDampak" class="filter-input-label">Kondisi Dampak Air</label>
                 <select id="filterDampak" class="filter-control-select">
                     <option value="">Semua Dampak Aliran</option>
@@ -75,7 +81,7 @@ require_once __DIR__ . '/includes/header.php';
                     <option value="bertekanan_rendah">Tekanan Rendah / Keruh</option>
                 </select>
             </div>
-            <div class="col-lg-2 col-md-12">
+            <div class="col-lg-2 col-md-3">
                 <button type="button" id="btnResetFilter" class="btn btn-outline-secondary w-100 fw-semibold" style="height: 48px; border-radius: var(--radius-md);" title="Reset Semua Filter" onclick="window.resetFilters()">
                     <?= getIcon('refresh') ?> <span>Reset</span>
                 </button>

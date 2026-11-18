@@ -8,8 +8,8 @@
  * ============================================================================
  */
 
-$pageTitle = "Buat Pengumuman Baru";
-require_once __DIR__ . '/../includes/admin_header.php';
+require_once __DIR__ . '/../includes/functions.php';
+requireAuth();
 
 // 1. Generate nomor tiket otomatis
 $nomor_tiket_auto = generateNomorTiket($pdo);
@@ -64,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             // Guard: pastikan $user tersedia
-            $createdBy = isset($user['id']) ? (int)$user['id'] : null;
+            $currentUser = currentUser();
+            $createdBy = isset($currentUser['id']) ? (int)$currentUser['id'] : null;
 
             $insert_sql = "
                 INSERT INTO pengumuman (
@@ -103,6 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     } // end csrfValidate
 }
+
+$pageTitle = "Buat Pengumuman Baru";
+require_once __DIR__ . '/../includes/admin_header.php';
+?>
 ?>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">

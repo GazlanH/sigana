@@ -8,8 +8,8 @@
  * ============================================================================
  */
 
-$pageTitle = "Edit Pengumuman";
-require_once __DIR__ . '/../includes/admin_header.php';
+require_once __DIR__ . '/../includes/functions.php';
+requireAuth();
 
 $id = (int)($_GET['id'] ?? 0);
 
@@ -111,6 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     } // end csrfValidate
 }
+
+$pageTitle = "Edit Pengumuman";
+require_once __DIR__ . '/../includes/admin_header.php';
+?>
 ?>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">

@@ -8,8 +8,8 @@
  * ============================================================================
  */
 
-$pageTitle = "Master Wilayah Kecamatan";
-require_once __DIR__ . '/../includes/admin_header.php';
+require_once __DIR__ . '/../includes/functions.php';
+requireAuth();
 
 $errors = [];
 $edit_id = (int) ($_GET['edit'] ?? 0);
@@ -22,7 +22,7 @@ if ($edit_id > 0) {
     $edit_data = $stmt_e->fetch();
 }
 
-// 1. Tambah, Update, atau Hapus Kecamatan
+// 1. Tambah, Update, atau Hapus Kecamatan (POST Processing SEBELUM Header Render)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi CSRF Token
     if (!csrfValidate()) {
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 3. Ambil Daftar Seluruh Kecamatan Beserta Statistik Pengumuman
+// 2. Ambil Daftar Seluruh Kecamatan Beserta Statistik Pengumuman
 $sql_kec = "
     SELECT k.*, 
         COUNT(p.id) as total_pengumuman,
@@ -101,6 +101,10 @@ $sql_kec = "
     ORDER BY k.nama_kecamatan ASC
 ";
 $list_kecamatan = $pdo->query($sql_kec)->fetchAll();
+
+// 3. Render HTML Header
+$pageTitle = "Master Wilayah Kecamatan";
+require_once __DIR__ . '/../includes/admin_header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">

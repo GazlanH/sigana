@@ -35,6 +35,22 @@ $query = "
 $stmt_pengumuman = $pdo->query($query);
 $pengumuman_list = $stmt_pengumuman->fetchAll();
 
+// 2. Ambil Statistik Ringkas (Live KPI Strip)
+$count_aktif = 0;
+$count_normalisasi = 0;
+$count_selesai = 0;
+
+foreach ($pengumuman_list as $p) {
+    if ($p['status'] === 'perbaikan' || $p['status'] === 'investigasi') {
+        $count_aktif++;
+    } elseif ($p['status'] === 'normalisasi') {
+        $count_normalisasi++;
+    } elseif ($p['status'] === 'selesai') {
+        $count_selesai++;
+    }
+}
+
+// 3. Ambil Daftar Seluruh Pengumuman
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -52,6 +68,49 @@ require_once __DIR__ . '/includes/header.php';
 
 <!-- 2. Main Content Container -->
 <main class="container mb-5">
+    <!-- Live KPI Status Strip -->
+    <div class="kpi-status-strip">
+        <div class="kpi-status-item">
+            <div class="kpi-icon-dot <?= $count_aktif > 0 ? 'bg-danger pulse-dot' : 'bg-secondary' ?>"></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Gangguan Fisik:</span>
+                <span class="kpi-value <?= $count_aktif > 0 ? 'text-danger' : 'text-muted' ?>">
+                    <?= $count_aktif > 0 ? $count_aktif . ' Titik Aktif' : '0 Titik (Nihil)' ?>
+                </span>
+            </div>
+        </div>
+
+        <div class="kpi-status-item">
+            <div class="kpi-icon-dot <?= $count_normalisasi > 0 ? 'bg-warning' : 'bg-secondary' ?>"></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Normalisasi Aliran:</span>
+                <span class="kpi-value <?= $count_normalisasi > 0 ? 'text-warning-emphasis' : 'text-muted' ?>">
+                    <?= $count_normalisasi ?> Wilayah
+                </span>
+            </div>
+        </div>
+
+        <div class="kpi-status-item d-none d-md-flex">
+            <div class="kpi-icon-dot bg-success"></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Wilayah Pelayanan:</span>
+                <span class="kpi-value text-success">
+                    <?= count($daftar_kecamatan) ?> Kecamatan Terlayani
+                </span>
+            </div>
+        </div>
+
+        <div class="kpi-status-item">
+            <div class="kpi-icon-dot bg-primary"></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Armada Tangki Darurat:</span>
+                <a href="https://wa.me/6281123456789" target="_blank" class="kpi-value text-primary text-decoration-none fw-bold">
+                    Siaga 24 Jam &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating Filter & Selection Card -->
     <div class="filter-search-card">
         <div class="row g-3 align-items-end">

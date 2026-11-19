@@ -216,6 +216,75 @@ body.bg-corporate {
 }
 
 /* ==========================================================================
+   2.5 LIVE KPI STATUS STRIP
+   ========================================================================== */
+.kpi-status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  margin-top: -55px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  position: relative;
+  z-index: 25;
+}
+
+.kpi-status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kpi-icon-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pulse-dot {
+  box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(225, 29, 72, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0);
+  }
+}
+
+.kpi-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.kpi-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-weight: 700;
+}
+
+/* ==========================================================================
    3. SEARCH & FILTER CARD (Floating)
    ========================================================================== */
 .filter-search-card {
@@ -224,7 +293,7 @@ body.bg-corporate {
   border: 1px solid var(--border-card);
   box-shadow: var(--shadow-float);
   padding: 24px;
-  margin-top: -38px;
+  margin-top: 0;
   position: relative;
   z-index: 20;
 }

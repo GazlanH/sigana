@@ -61,21 +61,76 @@ function checkSessionTimeout($maxIdleMinutes = 120) {
     if (isset($_SESSION['_last_activity'])) {
         $idleSeconds = time() - $_SESSION['_last_activity'];
         if ($idleSeconds > ($maxIdleMinutes * 60)) {
-            // Session expired — hapus semua data
-            $_SESSION = [];
-            if (ini_get("session.use_cookies")) {
-                $params = session_get_cookie_params();
-                setcookie(session_name(), '', time() - 42000,
-                    $params["path"], $params["domain"],
-                    $params["secure"], $params["httponly"]
-                );
-            }
-            session_destroy();
+            destroyAuthSession();
             return false;
         }
     }
     $_SESSION['_last_activity'] = time();
     return true;
+}
+
+/**
+ * Ikat sesi login dengan User-Agent browser & IP Address (Anti Session Hijacking).
+ * Dipanggil saat verifikasi login admin berhasil.
+ */
+function bindSessionFingerprint() {
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+    $ipAddress = getClientIpAddress();
+    $_SESSION['_auth_fingerprint'] = hash('sha256', $userAgent . '_' . $ipAddress);
+}
+
+/**
+ * Validasi apakah sidik jari peramban & jaringan masih cocok dengan saat login.
+ * Mencegah pencurian cookie sesi dari peramban/jaringan lain.
+ * Return true jika sesi aman dan valid.
+ */
+function validateSessionFingerprint() {
+    if (!isset($_SESSION['_auth_fingerprint'])) {
+        return true; // Belum/tidak dalam status login dengan fingerprint
+    }
+
+    $currentUserAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+    $currentIp = getClientIpAddress();
+    $currentFingerprint = hash('sha256', $currentUserAgent . '_' . $currentIp);
+
+    if (!hash_equals($_SESSION['_auth_fingerprint'], $currentFingerprint)) {
+        destroyAuthSession();
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Hancurkan sesi login secara tuntas dan hapus cookie sesi.
+ */
+function destroyAuthSession() {
+    $_SESSION = [];
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params["path"],
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
+    }
+    session_destroy();
+}
+
+/**
+ * Dapatkan alamat IP klien yang bersih & aman.
+ */
+function getClientIpAddress() {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+    // Sanitasi IP address sederhana
+    if (filter_var($ip, FILTER_VALIDATE_IP)) {
+        return $ip;
+    }
+    return '127.0.0.1';
 }
 
 // ============================================================================

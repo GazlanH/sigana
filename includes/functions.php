@@ -195,6 +195,13 @@ function requireAuth() {
         header('Location: login.php');
         exit;
     }
+
+    // Validasi Session Fingerprint (Anti Session Hijacking)
+    if (!validateSessionFingerprint()) {
+        setFlash('error', 'Terdeteksi perubahan perangkat atau jaringan. Untuk keamanan akun Anda, silakan login kembali.');
+        header('Location: login.php');
+        exit;
+    }
 }
 
 function currentUser() {

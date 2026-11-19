@@ -77,6 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['_last_activity'] = time();
                     $_SESSION['_session_created'] = time();
 
+                    // Kunci sesi dengan sidik jari IP & User-Agent (Anti-Hijacking)
+                    bindSessionFingerprint();
+
                     // Reset rate limiter
                     resetLoginAttempts();
 

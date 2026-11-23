@@ -64,8 +64,11 @@ $flash = getFlash();
                 <a href="kecamatan.php" class="admin-nav-link <?= $currentPage === 'kecamatan.php' ? 'active' : '' ?>">
                     <?= getIcon('pin') ?> <span>Wilayah</span>
                 </a>
+                <a href="users.php" class="admin-nav-link <?= $currentPage === 'users.php' ? 'active' : '' ?>">
+                    <?= getIcon('user') ?> <span>Petugas</span>
+                </a>
                 <a href="profil.php" class="admin-nav-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
-                    <?= getIcon('user') ?> <span>Profil</span>
+                    <?= getIcon('key') ?> <span>Profil</span>
                 </a>
             </nav>
 
@@ -121,8 +124,11 @@ $flash = getFlash();
             <a href="kecamatan.php" class="admin-drawer-link <?= $currentPage === 'kecamatan.php' ? 'active' : '' ?>">
                 <?= getIcon('pin') ?> <span>Wilayah Kecamatan</span>
             </a>
+            <a href="users.php" class="admin-drawer-link <?= $currentPage === 'users.php' ? 'active' : '' ?>">
+                <?= getIcon('user') ?> <span>Kelola Petugas</span>
+            </a>
             <a href="profil.php" class="admin-drawer-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
-                <?= getIcon('user') ?> <span>Akun Petugas</span>
+                <?= getIcon('key') ?> <span>Akun Profil Saya</span>
             </a>
         </div>
         <div class="border-top pt-3">

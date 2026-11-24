@@ -53,6 +53,9 @@ function loadEnvVariables($filePath = null) {
 // Muat .env jika tersedia
 loadEnvVariables();
 
+// Set default timezone aplikasi (WIB / Asia/Jakarta)
+date_default_timezone_set(env('APP_TIMEZONE', 'Asia/Jakarta'));
+
 // 2. Helper env() Global (Native PHP)
 if (!function_exists('env')) {
     function env($key, $default = null) {

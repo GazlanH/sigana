@@ -57,6 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($tindakan)) $errors[] = 'Langkah tindakan perbaikan wajib diisi.';
     if (empty($waktu_mulai)) $errors[] = 'Waktu mulai kejadian gangguan wajib ditentukan.';
 
+    // Validasi kronologi waktu: estimasi selesai tidak boleh lebih lampau dari waktu mulai
+    if (!empty($waktu_mulai) && !empty($estimasi_selesai)) {
+        if (strtotime($estimasi_selesai) <= strtotime($waktu_mulai)) {
+            $errors[] = 'Estimasi waktu normalisasi harus setelah waktu mulai kejadian.';
+        }
+    }
+
     // Validasi whitelist untuk enum fields
     $allowedDampak = ['mati_total', 'aliran_kecil', 'bertekanan_rendah'];
     $allowedStatus = ['investigasi', 'perbaikan', 'normalisasi', 'selesai'];

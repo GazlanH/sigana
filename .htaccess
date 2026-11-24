@@ -1,0 +1,8 @@
+# Proteksi File Konfigurasi & Berkas Sensitif
+<FilesMatch "^(\.env|\.env\.example|\.gitattributes|\.gitignore|database\.sql)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Matikan Directory Browsing (Mencegah pengintipan struktur folder)
+Options -Indexes

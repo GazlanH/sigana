@@ -20,14 +20,24 @@ csrfGuard('pengumuman.php');
 
 $id = (int) ($_POST['id'] ?? 0);
 $status = trim($_POST['status'] ?? '');
-$redirect = trim($_POST['redirect'] ?? 'pengumuman.php');
+$rawRedirect = trim($_POST['redirect'] ?? 'pengumuman.php');
+
+// Sanitasi & proteksi Open Redirect: Hanya izinkan redirect ke rute internal pengumuman.php atau index.php
+$redirect = 'pengumuman.php';
+$parsed = parse_url($rawRedirect);
+if (!isset($parsed['host']) && !isset($parsed['scheme'])) {
+    $path = basename($parsed['path'] ?? 'pengumuman.php');
+    if (in_array($path, ['pengumuman.php', 'index.php'])) {
+        $redirect = $path . (!empty($parsed['query']) ? '?' . $parsed['query'] : '');
+    }
+}
 
 // Whitelist status valid
 $allowed_statuses = ['investigasi', 'perbaikan', 'normalisasi', 'selesai'];
 
 if ($id <= 0 || !in_array($status, $allowed_statuses)) {
     setFlash('error', 'Parameter perubahan status tidak valid.');
-    header('Location: ' . $redirect);
+    safeRedirect($redirect);
     exit;
 }
 
@@ -39,13 +49,13 @@ try {
 
     if (!$current) {
         setFlash('error', 'Data pengumuman tidak ditemukan.');
-        header('Location: ' . $redirect);
+        safeRedirect($redirect);
         exit;
     }
 
     if ($current['status'] === $status) {
         setFlash('info', "Pengumuman #{$current['nomor_tiket']} sudah berstatus " . ucfirst($status) . ".");
-        header('Location: ' . $redirect);
+        safeRedirect($redirect);
         exit;
     }
 
@@ -77,5 +87,5 @@ try {
     setFlash('error', 'Gagal memperbarui status pengumuman. Terjadi kesalahan pada database.');
 }
 
-header('Location: ' . $redirect);
+safeRedirect($redirect);
 exit;

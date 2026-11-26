@@ -11,12 +11,23 @@
 $pageTitle = "Dashboard Operasional";
 require_once __DIR__ . '/../includes/admin_header.php';
 
-// 1. Ambil Statistik
-$total_semua = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman")->fetchColumn();
-$total_perbaikan = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'perbaikan'")->fetchColumn();
-$total_investigasi = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'investigasi'")->fetchColumn();
-$total_normalisasi = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'normalisasi'")->fetchColumn();
-$total_selesai = (int) $pdo->query("SELECT COUNT(*) FROM pengumuman WHERE status = 'selesai'")->fetchColumn();
+// 1. Ambil Statistik Gangguan (1 Query Agregasi Efisien Mencegah Multiple Round-trips)
+$stmt_stat = $pdo->query("
+    SELECT 
+        COUNT(*) AS total_semua,
+        COALESCE(SUM(CASE WHEN status = 'perbaikan' THEN 1 ELSE 0 END), 0) AS total_perbaikan,
+        COALESCE(SUM(CASE WHEN status = 'investigasi' THEN 1 ELSE 0 END), 0) AS total_investigasi,
+        COALESCE(SUM(CASE WHEN status = 'normalisasi' THEN 1 ELSE 0 END), 0) AS total_normalisasi,
+        COALESCE(SUM(CASE WHEN status = 'selesai' THEN 1 ELSE 0 END), 0) AS total_selesai
+    FROM pengumuman
+");
+$stat = $stmt_stat ? $stmt_stat->fetch(PDO::FETCH_ASSOC) : [];
+
+$total_semua = (int) ($stat['total_semua'] ?? 0);
+$total_perbaikan = (int) ($stat['total_perbaikan'] ?? 0);
+$total_investigasi = (int) ($stat['total_investigasi'] ?? 0);
+$total_normalisasi = (int) ($stat['total_normalisasi'] ?? 0);
+$total_selesai = (int) ($stat['total_selesai'] ?? 0);
 $total_kecamatan = (int) $pdo->query("SELECT COUNT(*) FROM kecamatan")->fetchColumn();
 
 // 2. Ambil 6 Pengumuman Terbaru

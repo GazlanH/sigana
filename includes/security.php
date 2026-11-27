@@ -280,6 +280,17 @@ function sendSecurityHeaders() {
     header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none';");
 }
 
+/**
+ * Kirim HTTP no-cache headers khusus untuk area privat/admin.
+ * Mencegah kebocoran data sensitif lewat cache browser saat tombol "Back" ditekan pasca-logout.
+ */
+function sendNoCacheHeaders() {
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Pragma: no-cache');
+    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+}
+
 // ============================================================================
 // 5. UTILITY KEAMANAN
 // ============================================================================

@@ -9,6 +9,7 @@
  */
 
 require_once __DIR__ . '/../includes/functions.php';
+sendNoCacheHeaders();
 
 // Hapus data session
 $_SESSION = [];

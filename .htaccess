@@ -1,8 +1,24 @@
-# Proteksi File Konfigurasi & Berkas Sensitif
+# ============================================================================
+# SIGANA - SISTEM INFORMASI PENGUMUMAN GANGGUAN ALIRAN AIR
+# PERUMDA AIR MINUM TIRTA INTAN KABUPATEN GARUT
+# ============================================================================
+
+# 1. Matikan Directory Browsing (Mencegah pengintipan struktur folder)
+Options -Indexes
+
+# 2. Proteksi File Konfigurasi & Berkas Sensitif
 <FilesMatch "^(\.env|\.env\.example|\.gitattributes|\.gitignore|database\.sql)">
-    Order allow,deny
-    Deny from all
+    <IfModule authz_core_module>
+        Require all denied
+    </IfModule>
+    <IfModule !authz_core_module>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
-# Matikan Directory Browsing (Mencegah pengintipan struktur folder)
-Options -Indexes
+# 3. Blokir Akses Langsung HTTP ke Berkas/Folder Internal (config & includes)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(config|includes)/ - [F,L]
+</IfModule>

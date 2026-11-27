@@ -16,6 +16,7 @@
  */
 
 require_once __DIR__ . '/../includes/functions.php';
+sendNoCacheHeaders();
 
 // Jika sudah login, langsung arahkan ke Dashboard
 if (isLoggedIn()) {

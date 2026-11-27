@@ -10,6 +10,7 @@
 
 require_once __DIR__ . '/functions.php';
 requireAuth();
+sendNoCacheHeaders();
 
 $user = currentUser();
 $currentPage = basename($_SERVER['PHP_SELF']);
